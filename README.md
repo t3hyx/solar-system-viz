@@ -1,0 +1,180 @@
+# Project Checklist
+
+## Technical Roadmap
+
+### 1. Project Setup and Basic Scene
+- [ ] **Initialize project structure**
+  - [ ] Create Vue.js project with Vite
+  - [ ] Configure TypeScript
+  - [ ] Install Three.js and dependencies
+  - [ ] Set up project folder structure
+- [ ] **Create basic 3D scene**
+  - [ ] Implement basic scene setup
+  - [ ] Create random-positioned stars programatically
+  - [ ] Add camera with appropriate position
+  - [ ] Configure WebGL renderer
+  - [ ] Add simple orbit controls
+  - [ ] Implement basic animation loop
+- [ ] **Test milestone**: Empty 3D scene with camera controls
+
+### 2. Core Architecture and Types
+- [ ] **Define type system**
+  - [ ] Create CelestialBody interface
+  - [ ] Create SolarSystemConfig interface
+  - [ ] Create SolarSystemState interface
+  - [ ] Define helper types and utilities
+- [ ] **Implement service architecture**
+  - [ ] Create SolarSystemService class structure
+  - [ ] Implement scene initialization
+  - [ ] Implement camera setup
+  - [ ] Implement renderer configuration
+  - [ ] Add basic animation loop
+- [ ] **Test milestone**: Working service with proper type definitions
+
+### 3. Basic Celestial Body Creation
+- [ ] **Create factory pattern**
+  - [ ] Implement CelestialBodyFactory class
+  - [ ] Create base createCelestialBody method
+  - [ ] Define material creation utilities
+- [ ] **Implement Sun**
+  - [ ] Create createSun method
+  - [ ] Configure sun material properties
+  - [ ] Add sun to scene
+  - [ ] Test sun rendering
+- [ ] **Test milestone**: Yellow sphere representing the sun
+
+### 4. Earth and Moon System
+- [ ] **Implement Earth**
+  - [ ] Create createEarth method
+  - [ ] Configure Earth material properties
+  - [ ] Set appropriate size and position
+- [ ] **Create Earth's orbit**
+  - [ ] Implement createOrbit method
+  - [ ] Position Earth in orbit around Sun
+  - [ ] Configure orbital parameters
+- [ ] **Implement Moon**
+  - [ ] Create createMoon method
+  - [ ] Configure Moon material properties
+  - [ ] Set appropriate size and position
+- [ ] **Create Moon's orbit**
+  - [ ] Position Moon in orbit around Earth
+  - [ ] Configure orbital parameters
+- [ ] **Test milestone**: Earth orbiting the Sun and Moon orbiting Earth
+
+### 5. Saturn with Rings
+- [ ] **Implement Saturn**
+  - [ ] Create createSaturnWithRings method
+  - [ ] Configure Saturn material properties
+  - [ ] Set appropriate size and position
+- [ ] **Create Saturn's rings**
+  - [ ] Implement ring geometry
+  - [ ] Configure ring material properties
+  - [ ] Position rings correctly
+- [ ] **Create Saturn's orbit**
+  - [ ] Position Saturn in orbit around Sun
+  - [ ] Configure orbital parameters
+- [ ] **Test milestone**: Saturn with rings orbiting the Sun
+
+### 6. Axis Grids and Visualization
+- [ ] **Create axis grid utility**
+  - [ ] Implement AxisGridHelper class
+  - [ ] Create grid creation methods
+  - [ ] Configure grid appearance
+- [ ] **Add grids to celestial bodies**
+  - [ ] Add grids to Sun
+  - [ ] Add grids to Earth
+  - [ ] Add grids to Moon
+  - [ ] Add grids to Saturn
+- [ ] **Add grids to orbits**
+  - [ ] Add grids to Earth's orbit
+  - [ ] Add grids to Moon's orbit
+  - [ ] Add grids to Saturn's orbit
+- [ ] **Implement GUI controls**
+  - [ ] Add controls for grid visibility
+  - [ ] Configure GUI layout
+- [ ] **Test milestone**: Axis grids that can be toggled on/off
+
+### 7. Lighting System
+- [ ] **Implement sun lighting**
+  - [ ] Add point light at sun's position
+  - [ ] Configure light intensity and color
+  - [ ] Test lighting effects
+- [ ] **Add ambient lighting**
+  - [ ] Add ambient light for overall illumination
+  - [ ] Configure ambient light properties
+- [ ] **Enhance materials**
+  - [ ] Adjust material properties for better lighting response
+  - [ ] Configure shininess and reflectivity
+  - [ ] Fine-tune emissive properties
+- [ ] **Test milestone**: Realistic lighting with day/night effect on planets
+
+### 8. Animation and Interaction
+- [ ] **Enhance animation system**
+  - [ ] Implement delta time-based animation
+  - [ ] Configure appropriate rotation speeds
+  - [ ] Add FPS counter for performance monitoring
+- [ ] **Improve user interaction**
+  - [ ] Enhance orbit controls for better camera movement
+  - [ ] Add zoom limits and constraints
+  - [ ] Implement smooth camera transitions
+- [ ] **Test milestone**: Smooth animation and responsive controls
+
+### 9. Performance Optimization
+- [ ] **Optimize rendering**
+  - [ ] Implement efficient animation loop
+  - [ ] Optimize object updates
+  - [ ] Reduce unnecessary calculations
+- [ ] **Balance visual quality**
+  - [ ] Adjust light intensity for realistic appearance
+  - [ ] Fine-tune material properties
+  - [ ] Optimize geometry complexity
+- [ ] **Monitor performance**
+  - [ ] Implement performance metrics
+  - [ ] Identify and fix bottlenecks
+  - [ ] Test on different devices
+- [ ] **Test milestone**: Good performance while maintaining visual quality
+
+### 10. Documentation and Polish
+- [ ] **Complete documentation**
+  - [ ] Update README with final details
+  - [ ] Add code comments for complex logic
+  - [ ] Document API and interfaces
+- [ ] **Final polish**
+  - [ ] Refine visual appearance
+  - [ ] Fix any remaining issues
+  - [ ] Perform final testing
+- [ ] **Test milestone**: Complete, well-documented application
+
+## Future Enhancements
+- [ ] **Add more planets and celestial bodies**
+- [ ] **Implement realistic orbital mechanics**
+- [ ] **Add texture mapping for more realistic appearance**
+- [ ] **Implement day/night cycle effects**
+- [ ] **Add informational overlays for celestial bodies**
+- [ ] **Implement camera presets for different views**
+- [ ] **Add time controls for speeding up/slowing down animation**
+- [ ] **Implement responsive design for different screen sizes**
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v14 or higher)
+- pnpm
+
+### Installation
+1. Clone the repository
+2. Install dependencies:
+   ```
+   pnpm install
+   ```
+3. Start the development server:
+   ```
+   pnpm dev
+   ```
+
+## _Technologies Used_
+- Vue.js 3
+- TypeScript
+- Three.js
+- Vite
+- lil-gui (for controls)

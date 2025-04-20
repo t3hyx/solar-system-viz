@@ -10,7 +10,7 @@
   - [ ] Set up project folder structure
 - [ ] **Create basic 3D scene**
   - [ ] Implement basic scene setup
-  - [ ] Create random-positioned stars programatically
+  - [ ] Create random-positioned stars programmatically
   - [ ] Add camera with appropriate position
   - [ ] Configure WebGL renderer
   - [ ] Add simple orbit controls

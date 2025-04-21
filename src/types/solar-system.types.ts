@@ -1,0 +1,34 @@
+import type * as THREE from 'three'
+import type { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+
+export interface ISolarSystemConfig {
+  fov: number
+  near: number
+  far: number
+  cameraPosition: THREE.Vector3
+  backgroundColor: number
+  lightColor: number
+  lightIntensity: number
+  ambientLightColor: number
+  ambientLightIntensity: number
+}
+
+export interface ISolarSystemState {
+  scene: THREE.Scene
+  camera: THREE.PerspectiveCamera
+  renderer: THREE.WebGLRenderer
+  controls: OrbitControls
+  objects: THREE.Object3D[]
+  animationFrameId: number
+}
+
+export interface ICelestialBody {
+  name: string
+  radius: number
+  distance: number
+  color: number
+  emissive: number
+  scale: number
+  segments: number
+  shininess?: number
+}

@@ -44,9 +44,12 @@ export interface ICelestialBody {
   name: string
   radius: number
   distance: number
+  selfRotationSpeed: number
   color: number
   emissive: number
+  emissiveIntensity: number
   scale: number
   segments: number
-  shininess?: number
+  shininess: number
+  wireframe: boolean
 }

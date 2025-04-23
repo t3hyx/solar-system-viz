@@ -2,6 +2,8 @@ import type { ICelestialBody, ISolarSystemConfig } from '@/types/solar-system.ty
 import { colorConfig } from '@/configs/color.config'
 import * as THREE from 'three'
 
+const wireframe = false
+
 export const solarSystemConfig: ISolarSystemConfig = {
   camera: {
     fov: 75,
@@ -39,8 +41,24 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     distance: 0,
     color: colorConfig.sunYellow,
     emissive: colorConfig.sunraysOrange,
+    emissiveIntensity: 1,
     scale: 5,
     segments: 64,
-    shininess: 100,
+    shininess: 0,
+    selfRotationSpeed: 0.001,
+    wireframe,
+  },
+  earth: {
+    name: 'Earth',
+    radius: 1,
+    distance: 1,
+    color: colorConfig.earthBlue,
+    emissive: colorConfig.pureBlack,
+    emissiveIntensity: 0,
+    scale: 1,
+    segments: 32,
+    shininess: 30,
+    selfRotationSpeed: 0.001,
+    wireframe,
   },
 }

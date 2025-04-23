@@ -59,6 +59,14 @@ export class SolarSystemService {
     const earth = CelestialBodyFactory.createEarth()
     earthOrbit.add(earth)
     this.state.objects.push(earth)
+
+    // * Add Moon's orbit and Moon on it
+    const moonOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.moon.distance)
+    earthOrbit.add(moonOrbit) // edge-case: Moon's orbit is attached to Earth's orbit
+
+    const moon = CelestialBodyFactory.createMoon()
+    moonOrbit.add(moon)
+    this.state.objects.push(moon)
   }
 
   // ! ===== PRIVATE METHODS =====

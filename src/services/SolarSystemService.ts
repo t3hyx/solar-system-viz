@@ -61,7 +61,7 @@ export class SolarSystemService {
     // step2: render
     this.state.renderer.render(this.state.scene, this.state.camera)
     // step3: request next frame
-    this.state.animationFrameId = requestAnimationFrame(this.animate)
+    this.state.animationFrameId = requestAnimationFrame(() => this.animate())
   }
 
   // * Creates & configures the renderer

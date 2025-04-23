@@ -19,6 +19,13 @@ export class CelestialBodyFactory {
     return mesh
   }
 
+  // * Creates an orbit object for a celestial body
+  public static createOrbit(distance: number): THREE.Object3D {
+    const orbit = new THREE.Object3D()
+    orbit.position.x = distance
+    return orbit
+  }
+
   // * Sun
   public static createSun(): THREE.Mesh {
     return this.createCelestialBody({

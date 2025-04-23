@@ -3,33 +3,33 @@
 ## Technical Roadmap
 
 ### 1. Project Setup and Basic Scene
-- [ ] **Initialize project structure**
-  - [ ] Create Vue.js project with Vite
-  - [ ] Configure TypeScript
-  - [ ] Install Three.js and dependencies
-  - [ ] Set up project folder structure
-- [ ] **Create basic 3D scene**
-  - [ ] Implement basic scene setup
-  - [ ] Create random-positioned stars programmatically
-  - [ ] Add camera with appropriate position
-  - [ ] Configure WebGL renderer
-  - [ ] Add simple orbit controls
-  - [ ] Implement basic animation loop
-- [ ] **Test milestone**: Empty 3D scene with camera controls
+- [x] **Initialize project structure**
+  - [x] Create Vue.js project with Vite
+  - [x] Configure TypeScript
+  - [x] Install Three.js and dependencies
+  - [x] Set up project folder structure
+- [x] **Create basic 3D scene**
+  - [x] Implement basic scene setup
+  - [x] Create random-positioned stars programmatically
+  - [x] Add camera with appropriate position
+  - [x] Configure WebGL renderer
+  - [x] Add simple orbit controls
+  - [x] Implement basic animation loop
+- [x] **Test milestone**: Empty 3D scene with camera controls
 
 ### 2. Core Architecture and Types
-- [ ] **Define type system**
-  - [ ] Create CelestialBody interface
-  - [ ] Create SolarSystemConfig interface
-  - [ ] Create SolarSystemState interface
-  - [ ] Define helper types and utilities
-- [ ] **Implement service architecture**
-  - [ ] Create SolarSystemService class structure
-  - [ ] Implement scene initialization
-  - [ ] Implement camera setup
-  - [ ] Implement renderer configuration
-  - [ ] Add basic animation loop
-- [ ] **Test milestone**: Working service with proper type definitions
+- [x] **Define type system**
+  - [x] Create CelestialBody interface
+  - [x] Create SolarSystemConfig interface
+  - [x] Create SolarSystemState interface
+  - [x] Define helper types and utilities
+- [x] **Implement service architecture**
+  - [x] Create SolarSystemService class structure
+  - [x] Implement scene initialization
+  - [x] Implement camera setup
+  - [x] Implement renderer configuration
+  - [x] Add basic animation loop
+- [x] **Test milestone**: Working service with proper type definitions
 
 ### 3. Basic Celestial Body Creation
 - [ ] **Create factory pattern**

@@ -46,22 +46,22 @@
 - [x] **Test milestone**: Yellow sphere representing the sun
 
 ### 4. Earth and Moon System
-- [ ] **Implement Earth**
-  - [ ] Create createEarth method
-  - [ ] Configure Earth material properties
-  - [ ] Set appropriate size and position
-- [ ] **Create Earth's orbit**
-  - [ ] Implement createOrbit method
-  - [ ] Position Earth in orbit around Sun
-  - [ ] Configure orbital parameters
-- [ ] **Implement Moon**
-  - [ ] Create createMoon method
-  - [ ] Configure Moon material properties
-  - [ ] Set appropriate size and position
-- [ ] **Create Moon's orbit**
-  - [ ] Position Moon in orbit around Earth
-  - [ ] Configure orbital parameters
-- [ ] **Test milestone**: Earth orbiting the Sun and Moon orbiting Earth
+- [x] **Implement Earth**
+  - [x] Create createEarth method
+  - [x] Configure Earth material properties
+  - [x] Set appropriate size and position
+- [x] **Create Earth's orbit**
+  - [x] Implement createOrbit method
+  - [x] Position Earth in orbit around Sun
+  - [x] Configure orbital parameters
+- [x] **Implement Moon**
+  - [x] Create createMoon method
+  - [x] Configure Moon material properties
+  - [x] Set appropriate size and position
+- [x] **Create Moon's orbit**
+  - [x] Position Moon in orbit around Earth
+  - [x] Configure orbital parameters
+- [x] **Test milestone**: Earth orbiting the Sun and Moon orbiting Earth
 
 ### 5. Saturn with Rings
 - [ ] **Implement Saturn**

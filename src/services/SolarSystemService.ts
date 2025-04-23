@@ -1,4 +1,5 @@
 import type { ISolarSystemConfig, ISolarSystemState } from '@/types/solar-system.types'
+import { celestialBodiesConfig } from '@/configs/solar-system.config'
 import { CelestialBodyFactory } from '@/factories/CelestialBodyFactory'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
@@ -20,36 +21,45 @@ export class SolarSystemService {
   public startAnimation(): void {
     this.animate()
   }
-  
+
   // * Handles window resize events if any
   // TODO: Find where it could be useful to implement this (as per 3JS docs)
   // public handleResize(container: HTMLElement): void {
-    //   const width = container.clientWidth
-    //   const height = container.clientHeight
-    
-    //   // Update camera
-    //   this.state.camera.aspect = width / height
-    //   this.state.camera.updateProjectionMatrix()
-    
-    //   // Update renderer
-    //   this.state.renderer.setSize(width, height, false)
-    // }
-    
-    // # Solar System
-    public createSolarSystem(): void {
-      // * Solar system container
-      const solarSystem = new THREE.Object3D()
-      this.state.scene.add(solarSystem)
-      this.state.objects.push(solarSystem)
+  //   const width = container.clientWidth
+  //   const height = container.clientHeight
 
-      // * Add lights
-      this.createLights()
+  //   // Update camera
+  //   this.state.camera.aspect = width / height
+  //   this.state.camera.updateProjectionMatrix()
 
-      // * Add Sun
-      const sun = CelestialBodyFactory.createSun()
-      this.state.scene.add(sun)
-      this.state.objects.push(sun)
-    }
+  //   // Update renderer
+  //   this.state.renderer.setSize(width, height, false)
+  // }
+
+  // # Solar System
+  public createSolarSystem(): void {
+    // * Solar system container
+    const solarSystem = new THREE.Object3D()
+    this.state.scene.add(solarSystem)
+    this.state.objects.push(solarSystem)
+
+    // * Add lights
+    this.createLights()
+
+    // * Add Sun
+    const sun = CelestialBodyFactory.createSun()
+    this.state.scene.add(sun)
+    this.state.objects.push(sun)
+
+    // * Add Earth's orbit and Earth on it
+    const earthOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.earth.distance)
+    this.state.scene.add(earthOrbit)
+    this.state.objects.push(earthOrbit)
+
+    const earth = CelestialBodyFactory.createEarth()
+    earthOrbit.add(earth)
+    this.state.objects.push(earth)
+  }
 
   // ! ===== PRIVATE METHODS =====
   // # Main
@@ -80,7 +90,6 @@ export class SolarSystemService {
     // step3: request next frame
     this.state.animationFrameId = requestAnimationFrame(() => this.animate())
   }
-
 
   // # Helpers
   // * Creates & configures the renderer

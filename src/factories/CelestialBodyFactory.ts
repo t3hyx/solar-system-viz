@@ -59,4 +59,21 @@ export class CelestialBodyFactory {
       wireframe: this.config.earth.wireframe,
     })
   }
+
+  // * Moon
+  public static createMoon(): THREE.Mesh {
+    return this.createCelestialBody({
+      name: this.config.moon.name,
+      radius: this.config.moon.radius,
+      distance: this.config.moon.distance,
+      color: this.config.moon.color,
+      emissive: this.config.moon.emissive,
+      emissiveIntensity: this.config.moon.emissiveIntensity,
+      scale: this.config.moon.scale,
+      segments: this.config.moon.segments,
+      shininess: this.config.moon.shininess,
+      selfRotationSpeed: this.config.moon.selfRotationSpeed,
+      wireframe: this.config.moon.wireframe,
+    })
+  }
 }

@@ -27,9 +27,29 @@ export class CelestialBodyFactory {
       distance: this.config.sun.distance,
       color: this.config.sun.color,
       emissive: this.config.sun.emissive,
+      emissiveIntensity: this.config.sun.emissiveIntensity,
       scale: this.config.sun.scale,
       segments: this.config.sun.segments,
       shininess: this.config.sun.shininess,
+      selfRotationSpeed: this.config.sun.selfRotationSpeed,
+      wireframe: this.config.sun.wireframe,
+    })
+  }
+
+  // * Earth
+  public static createEarth(): THREE.Mesh {
+    return this.createCelestialBody({
+      name: this.config.earth.name,
+      radius: this.config.earth.radius,
+      distance: this.config.earth.distance,
+      color: this.config.earth.color,
+      emissive: this.config.earth.emissive,
+      emissiveIntensity: this.config.earth.emissiveIntensity,
+      scale: this.config.earth.scale,
+      segments: this.config.earth.segments,
+      shininess: this.config.earth.shininess,
+      selfRotationSpeed: this.config.earth.selfRotationSpeed,
+      wireframe: this.config.earth.wireframe,
     })
   }
 }

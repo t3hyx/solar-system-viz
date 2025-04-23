@@ -1,4 +1,5 @@
 import type { ISolarSystemConfig, ISolarSystemState } from '@/types/solar-system.types'
+import { CelestialBodyFactory } from '@/factories/CelestialBodyFactory'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
@@ -15,27 +16,43 @@ export class SolarSystemService {
   }
 
   // ! ===== PUBLIC METHODS =====
-
   // * Starts the animation
   public startAnimation(): void {
     this.animate()
   }
-
+  
   // * Handles window resize events if any
   // TODO: Find where it could be useful to implement this (as per 3JS docs)
   // public handleResize(container: HTMLElement): void {
-  //   const width = container.clientWidth
-  //   const height = container.clientHeight
+    //   const width = container.clientWidth
+    //   const height = container.clientHeight
+    
+    //   // Update camera
+    //   this.state.camera.aspect = width / height
+    //   this.state.camera.updateProjectionMatrix()
+    
+    //   // Update renderer
+    //   this.state.renderer.setSize(width, height, false)
+    // }
+    
+    // # Solar System
+    public createSolarSystem(): void {
+      // * Solar system container
+      const solarSystem = new THREE.Object3D()
+      this.state.scene.add(solarSystem)
+      this.state.objects.push(solarSystem)
 
-  //   // Update camera
-  //   this.state.camera.aspect = width / height
-  //   this.state.camera.updateProjectionMatrix()
+      // * Add lights
+      this.createLights()
 
-  //   // Update renderer
-  //   this.state.renderer.setSize(width, height, false)
-  // }
+      // * Add Sun
+      const sun = CelestialBodyFactory.createSun()
+      this.state.scene.add(sun)
+      this.state.objects.push(sun)
+    }
 
   // ! ===== PRIVATE METHODS =====
+  // # Main
   // * Initializes the state of the solar system
   private initializeState(container: HTMLElement): ISolarSystemState {
     // Create core components
@@ -64,6 +81,8 @@ export class SolarSystemService {
     this.state.animationFrameId = requestAnimationFrame(() => this.animate())
   }
 
+
+  // # Helpers
   // * Creates & configures the renderer
   private createRenderer(container: HTMLElement): THREE.WebGLRenderer {
     const renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -81,12 +100,12 @@ export class SolarSystemService {
     const aspect = container.clientWidth / container.clientHeight
 
     const camera = new THREE.PerspectiveCamera(
-      this.config.fov,
+      this.config.camera.fov,
       aspect,
-      this.config.near,
-      this.config.far,
+      this.config.camera.near,
+      this.config.camera.far,
     )
-    camera.position.copy(this.config.cameraPosition)
+    camera.position.copy(this.config.camera.position)
     camera.lookAt(0, 0, 0)
 
     return camera
@@ -96,13 +115,13 @@ export class SolarSystemService {
   private createStars() {
     const starsGeometry = new THREE.BufferGeometry()
     const starsMaterial = new THREE.PointsMaterial({
-      color: 0xFFFFFF,
-      size: 0.1,
-      sizeAttenuation: true,
+      color: this.config.stars.color,
+      size: this.config.stars.size,
+      sizeAttenuation: this.config.stars.sizeAttenuation,
     })
 
     const starsVertices = []
-    for (let i = 0; i < 5000; i++) {
+    for (let i = 0; i < this.config.stars.count; i++) {
       const x = (Math.random() - 0.5) * 2000
       const y = (Math.random() - 0.5) * 2000
       const z = (Math.random() - 0.5) * 2000
@@ -118,7 +137,7 @@ export class SolarSystemService {
   // * Creates the scene
   private createScene(): THREE.Scene {
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(this.config.backgroundColor)
+    scene.background = new THREE.Color(this.config.background.color)
 
     // Add the stars
     scene.add(this.createStars())
@@ -133,5 +152,25 @@ export class SolarSystemService {
     controls.dampingFactor = 0.05
 
     return controls
+  }
+
+  // * Creates lights configuration
+  private createLights() {
+    // Sun Light
+    const sunLight = new THREE.PointLight(
+      this.config.lights.sun.color,
+      this.config.lights.sun.intensity,
+      this.config.lights.sun.distance,
+      this.config.lights.sun.decay,
+    )
+    sunLight.position.set(0, 0, 0)
+    this.state.scene.add(sunLight)
+
+    // Ambient Light
+    const ambientLight = new THREE.AmbientLight(
+      this.config.lights.ambient.color,
+      this.config.lights.ambient.intensity,
+    )
+    this.state.scene.add(ambientLight)
   }
 }

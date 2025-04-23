@@ -2,15 +2,33 @@ import type * as THREE from 'three'
 import type { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
 export interface ISolarSystemConfig {
-  fov: number
-  near: number
-  far: number
-  cameraPosition: THREE.Vector3
-  backgroundColor: number
-  lightColor: number
-  lightIntensity: number
-  ambientLightColor: number
-  ambientLightIntensity: number
+  camera: {
+    fov: number
+    near: number
+    far: number
+    position: THREE.Vector3
+  }
+  background: {
+    color: number
+  }
+  lights: {
+    sun: {
+      color: number
+      intensity: number
+      distance: number
+      decay: number
+    }
+    ambient: {
+      color: number
+      intensity: number
+    }
+  }
+  stars: {
+    color: number
+    count: number
+    size: number
+    sizeAttenuation: boolean
+  }
 }
 
 export interface ISolarSystemState {

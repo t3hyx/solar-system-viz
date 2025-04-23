@@ -15,6 +15,9 @@ function init() {
   // Create solar system service
   solarSystemService = new SolarSystemService(container, config)
 
+  // Create solar system
+  solarSystemService.createSolarSystem()
+
   // Start animation
   solarSystemService.startAnimation()
 }

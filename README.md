@@ -32,16 +32,18 @@
 - [x] **Test milestone**: Working service with proper type definitions
 
 ### 3. Basic Celestial Body Creation
-- [ ] **Create factory pattern**
-  - [ ] Implement CelestialBodyFactory class
-  - [ ] Create base createCelestialBody method
-  - [ ] Define material creation utilities
-- [ ] **Implement Sun**
-  - [ ] Create createSun method
-  - [ ] Configure sun material properties
-  - [ ] Add sun to scene
-  - [ ] Test sun rendering
-- [ ] **Test milestone**: Yellow sphere representing the sun
+- [x] **Create factory pattern**
+  - [x] Implement CelestialBodyFactory class
+  - [x] Create base createCelestialBody method
+  - [x] Define material creation utilities
+- [x] **Implement Sun**
+  - [x] Create createSun method
+  - [x] Configure sun material properties
+  - [x] Create lights
+  - [x] Create a solar-system container
+  - [x] Add sun to scene
+  - [x] Test sun rendering
+- [x] **Test milestone**: Yellow sphere representing the sun
 
 ### 4. Earth and Moon System
 - [ ] **Implement Earth**

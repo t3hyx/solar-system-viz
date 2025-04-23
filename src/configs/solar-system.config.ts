@@ -64,7 +64,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   moon: {
     name: 'Moon',
     radius: 0.5,
-    distance: 1,
+    distance: 2,
     color: colorConfig.pureWhite,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,

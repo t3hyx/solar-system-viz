@@ -11,20 +11,38 @@ export class SolarSystemService {
   // * State & Config
   private config: ISolarSystemConfig
   private state: ISolarSystemState
+  // * Performance monitoring -- not intended to be used in production
+  private fpsCounter: { value: number }
+  private lastTime: number
+  private frameCount: number
+  private fpsUpdateInterval: number
+  private fpsUpdateTime: number
 
   // ! ===== CONSTRUCTOR =====
   constructor(container: HTMLElement, config: ISolarSystemConfig) {
+    // * Initialize configuration
     this.config = config
+
+    // * Initialize performance monitoring
+    this.fpsCounter = { value: 0 }
+    this.lastTime = performance.now()
+    this.frameCount = 0
+    this.fpsUpdateInterval = 500 // update fps every 500ms
+    this.fpsUpdateTime = this.lastTime
+
+    // * Initialize state
     this.state = this.initializeState(container)
   }
 
   // ! ===== PUBLIC METHODS =====
   // * Starts the animation
   public startAnimation(): void {
+    this.lastTime = performance.now()
+    this.fpsUpdateTime = this.lastTime
     this.animate()
   }
 
-  // * Adds axis and grid to a node
+  // * Adds axis and grid to a node -- not intended to be used in production
   public addAxisGrid(node: THREE.Object3D, units: number, label: string): void {
     const helper = new AxisGridsHelper(node, units)
     this.state.gui.add(helper, 'visible').name(label)
@@ -46,6 +64,10 @@ export class SolarSystemService {
 
   // # Solar System
   public createSolarSystem(): void {
+    // * Setup GUI -- not intended to be used in production
+    const fpsFolder = this.state.gui.addFolder('FPS')
+    fpsFolder.add(this.fpsCounter, 'value').name('FPS').listen()
+
     // * Solar system container
     const solarSystem = new THREE.Object3D()
     this.state.scene.add(solarSystem)
@@ -85,7 +107,7 @@ export class SolarSystemService {
     saturnOrbit.add(saturn)
     this.state.objects.push(saturn)
 
-    // * Add axis and grid to all objects
+    // * Add axis and grid to all objects -- not intended to be used in production
     this.addAxisGrid(solarSystem, 100, '-- Solar System --')
     this.addAxisGrid(sun, 3, 'Sun')
     this.addAxisGrid(earth, 3, 'Earth')
@@ -120,11 +142,16 @@ export class SolarSystemService {
 
   // * Animation loop
   private animate(): void {
-    // step1: update controls
+    // step1: calculate time since last frame
+    const currentTime = performance.now()
+    this.lastTime = currentTime
+    // step2: update fps counter -- not intended to be used in production
+    this.updateFPSCounter(currentTime)
+    // step3: update controls
     this.state.controls.update()
-    // step2: render
+    // step4: render
     this.state.renderer.render(this.state.scene, this.state.camera)
-    // step3: request next frame
+    // step5: request next frame
     this.state.animationFrameId = requestAnimationFrame(() => this.animate())
   }
 
@@ -218,5 +245,18 @@ export class SolarSystemService {
       this.config.lights.ambient.intensity,
     )
     this.state.scene.add(ambientLight)
+  }
+
+  // * Updates the FPS counter -- not intended to be used in production
+  private updateFPSCounter(currentTime: number): void {
+    // increment frame count
+    this.frameCount++
+
+    // update fps every 500ms
+    if (currentTime - this.fpsUpdateTime >= this.fpsUpdateInterval) {
+      this.fpsCounter.value = Math.round((this.frameCount / (currentTime - this.fpsUpdateTime)) * 500)
+      this.frameCount = 0
+      this.fpsUpdateTime = currentTime
+    }
   }
 }

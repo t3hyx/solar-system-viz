@@ -6,4 +6,5 @@ export const colorConfig = {
   sunraysOrange: 0xFF9900,
   earthBlue: 0x0256D4,
   moonGray: 0xB7B7B7,
+  saturnYellow: 0xE6A205,
 }

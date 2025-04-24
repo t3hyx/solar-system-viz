@@ -4,6 +4,7 @@ import { CelestialBodyFactory } from '@/factories/CelestialBodyFactory'
 import { AxisGridsHelper } from '@/utils/AxisGridsHelper'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
 
 export class SolarSystemService {
   // ! ===== PROPERTIES =====
@@ -24,8 +25,9 @@ export class SolarSystemService {
   }
 
   // * Adds axis and grid to a node
-  public addAxisGrid(node: THREE.Object3D, units: number): void {
-    const _axisGridHelper = new AxisGridsHelper(node, units)
+  public addAxisGrid(node: THREE.Object3D, units: number, label: string): void {
+    const helper = new AxisGridsHelper(node, units)
+    this.state.gui.add(helper, 'visible').name(label)
   }
 
   // * Handles window resize events if any
@@ -84,14 +86,14 @@ export class SolarSystemService {
     this.state.objects.push(saturn)
 
     // * Add axis and grid to all objects
-    // this.addAxisGrid(solarSystem, 100)
-    // this.addAxisGrid(sun, 3)
-    // this.addAxisGrid(earthOrbit, 5)
-    // this.addAxisGrid(earth, 3)
-    // this.addAxisGrid(moonOrbit, 3)
-    // this.addAxisGrid(moon, 1)
-    // this.addAxisGrid(saturnOrbit, 15)
-    // this.addAxisGrid(saturn, 10)
+    this.addAxisGrid(solarSystem, 100, '-- Solar System --')
+    this.addAxisGrid(sun, 3, 'Sun')
+    this.addAxisGrid(earth, 3, 'Earth')
+    this.addAxisGrid(moon, 1, 'Moon')
+    this.addAxisGrid(saturn, 10, 'Saturn')
+    this.addAxisGrid(earthOrbit, 5, 'orbit-Earth')
+    this.addAxisGrid(moonOrbit, 3, 'orbit-Moon')
+    this.addAxisGrid(saturnOrbit, 15, 'orbit-Saturn')
   }
 
   // ! ===== PRIVATE METHODS =====
@@ -103,12 +105,14 @@ export class SolarSystemService {
     const camera = this.createCamera(container)
     const scene = this.createScene()
     const controls = this.createControls(camera, renderer)
+    const gui = new GUI()
 
     return {
       renderer,
       camera,
       scene,
       controls,
+      gui,
       objects: [],
       animationFrameId: 0,
     }

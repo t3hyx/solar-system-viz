@@ -56,7 +56,6 @@ export class SolarSystemService {
     const sun = CelestialBodyFactory.createSun()
     solarSystem.add(sun)
     this.state.objects.push(sun)
-    this.addAxisGrid(sun, 10) // Add axes and grid to the sun
 
     // * Add Earth's orbit, and Earth planet on it
     const earthOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.earth.distance)
@@ -83,6 +82,16 @@ export class SolarSystemService {
     const saturn = CelestialBodyFactory.createSaturnWithRings() // edge-case: Saturn is a group because of its rings
     saturnOrbit.add(saturn)
     this.state.objects.push(saturn)
+
+    // * Add axis and grid to all objects
+    // this.addAxisGrid(solarSystem, 100)
+    // this.addAxisGrid(sun, 3)
+    // this.addAxisGrid(earthOrbit, 5)
+    // this.addAxisGrid(earth, 3)
+    // this.addAxisGrid(moonOrbit, 3)
+    // this.addAxisGrid(moon, 1)
+    // this.addAxisGrid(saturnOrbit, 15)
+    // this.addAxisGrid(saturn, 10)
   }
 
   // ! ===== PRIVATE METHODS =====

@@ -1,5 +1,6 @@
 import type * as THREE from 'three'
 import type { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import type { GUI } from 'three/addons/libs/lil-gui.module.min.js'
 
 export interface ISolarSystemConfig {
   camera: {
@@ -36,6 +37,7 @@ export interface ISolarSystemState {
   camera: THREE.PerspectiveCamera
   renderer: THREE.WebGLRenderer
   controls: OrbitControls
+  gui: GUI
   objects: THREE.Object3D[]
   animationFrameId: number
 }

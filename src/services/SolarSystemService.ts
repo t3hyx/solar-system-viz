@@ -1,6 +1,7 @@
 import type { ISolarSystemConfig, ISolarSystemState } from '@/types/solar-system.types'
 import { celestialBodiesConfig } from '@/configs/solar-system.config'
 import { CelestialBodyFactory } from '@/factories/CelestialBodyFactory'
+import { AxisGridsHelper } from '@/utils/AxisGridsHelper'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
@@ -20,6 +21,11 @@ export class SolarSystemService {
   // * Starts the animation
   public startAnimation(): void {
     this.animate()
+  }
+
+  // * Adds axis to a node
+  public addAxis(node: THREE.Object3D): void {
+    const _axisHelper = new AxisGridsHelper(node)
   }
 
   // * Handles window resize events if any
@@ -50,6 +56,7 @@ export class SolarSystemService {
     const sun = CelestialBodyFactory.createSun()
     solarSystem.add(sun)
     this.state.objects.push(sun)
+    this.addAxis(sun) // Add axes to the sun
 
     // * Add Earth's orbit, and Earth planet on it
     const earthOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.earth.distance)

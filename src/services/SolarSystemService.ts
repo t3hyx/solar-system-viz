@@ -48,25 +48,34 @@ export class SolarSystemService {
 
     // * Add Sun
     const sun = CelestialBodyFactory.createSun()
-    this.state.scene.add(sun)
+    solarSystem.add(sun)
     this.state.objects.push(sun)
 
-    // * Add Earth's orbit and Earth on it
+    // * Add Earth's orbit, and Earth planet on it
     const earthOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.earth.distance)
-    this.state.scene.add(earthOrbit)
+    solarSystem.add(earthOrbit)
     this.state.objects.push(earthOrbit)
 
     const earth = CelestialBodyFactory.createEarth()
     earthOrbit.add(earth)
     this.state.objects.push(earth)
 
-    // * Add Moon's orbit and Moon on it
+    // * Add Moon's orbit, and Moon planet on it
     const moonOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.moon.distance)
     earthOrbit.add(moonOrbit) // edge-case: Moon's orbit is attached to Earth's orbit
 
     const moon = CelestialBodyFactory.createMoon()
     moonOrbit.add(moon)
     this.state.objects.push(moon)
+
+    // * Add Saturn's orbit, and Saturn with its rings, on it
+    const saturnOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.saturn.distance)
+    solarSystem.add(saturnOrbit)
+    this.state.objects.push(saturnOrbit)
+
+    const saturn = CelestialBodyFactory.createSaturnWithRings() // edge-case: Saturn is a group because of its rings
+    saturnOrbit.add(saturn)
+    this.state.objects.push(saturn)
   }
 
   // ! ===== PRIVATE METHODS =====

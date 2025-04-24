@@ -76,4 +76,36 @@ export class CelestialBodyFactory {
       wireframe: this.config.moon.wireframe,
     })
   }
+
+  // * Saturn
+  public static createSaturnWithRings(): THREE.Group {
+    // Create Saturn group
+    const saturnGroup = new THREE.Group()
+
+    // Create Saturn planet
+    const saturnGeometry = new THREE.SphereGeometry(1, 32, 32)
+    const saturnMaterial = new THREE.MeshPhongMaterial({
+      color: this.config.saturn.color,
+      emissive: this.config.saturn.emissive,
+      shininess: this.config.saturn.shininess,
+    })
+    const saturn = new THREE.Mesh(saturnGeometry, saturnMaterial)
+    saturn.scale.set(2.5, 2.5, 2.5)
+    saturnGroup.add(saturn)
+
+    // Create Saturn rings
+    const ringGeometry = new THREE.RingGeometry(3, 5, 64)
+    const ringMaterial = new THREE.MeshPhongMaterial({
+      color: this.config.saturn.color,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.8,
+      shininess: 30,
+    })
+    const rings = new THREE.Mesh(ringGeometry, ringMaterial)
+    rings.rotation.x = Math.PI / 2 // x Rotate to be horizontal
+    saturnGroup.add(rings)
+
+    return saturnGroup
+  }
 }

@@ -23,9 +23,9 @@ export class SolarSystemService {
     this.animate()
   }
 
-  // * Adds axis to a node
-  public addAxis(node: THREE.Object3D): void {
-    const _axisHelper = new AxisGridsHelper(node)
+  // * Adds axis and grid to a node
+  public addAxisGrid(node: THREE.Object3D, units: number): void {
+    const _axisGridHelper = new AxisGridsHelper(node, units)
   }
 
   // * Handles window resize events if any
@@ -56,7 +56,7 @@ export class SolarSystemService {
     const sun = CelestialBodyFactory.createSun()
     solarSystem.add(sun)
     this.state.objects.push(sun)
-    this.addAxis(sun) // Add axes to the sun
+    this.addAxisGrid(sun, 10) // Add axes and grid to the sun
 
     // * Add Earth's orbit, and Earth planet on it
     const earthOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.earth.distance)

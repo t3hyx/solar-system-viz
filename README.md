@@ -78,23 +78,27 @@
 - [x] **Test milestone**: Saturn with rings orbiting the Sun
 
 ### 6. Axis Grids and Visualization
-- [ ] **Create axis grid utility**
-  - [ ] Implement AxisGridHelper class
-  - [ ] Create grid creation methods
-  - [ ] Configure grid appearance
-- [ ] **Add grids to celestial bodies**
-  - [ ] Add grids to Sun
-  - [ ] Add grids to Earth
-  - [ ] Add grids to Moon
-  - [ ] Add grids to Saturn
-- [ ] **Add grids to orbits**
-  - [ ] Add grids to Earth's orbit
-  - [ ] Add grids to Moon's orbit
-  - [ ] Add grids to Saturn's orbit
-- [ ] **Implement GUI controls**
-  - [ ] Add controls for grid visibility
-  - [ ] Configure GUI layout
-- [ ] **Test milestone**: Axis grids that can be toggled on/off
+- [x] **Create axis grid utility**
+  - [x] Implement AxisGridHelper class
+  - [x] Create grid creation methods
+  - [x] Configure grid appearance
+- [x] **Add grids to celestial bodies**
+  - [x] Add grids to Sun
+  - [x] Add grids to Earth
+  - [x] Add grids to Moon
+  - [x] Add grids to Saturn
+- [x] **Add grids to orbits**
+  - [x] Add grids to Earth's orbit
+  - [x] Add grids to Moon's orbit
+  - [x] Add grids to Saturn's orbit
+- [x] **Implement GUI controls**
+  - [x] Add controls for grid visibility
+  - [x] Configure GUI layout
+- [x] **Implement FPS counter**
+  - [x] Add updateFPSCounter method
+  - [x] Add 'FPS' GUI section
+  - [x] Implement FPS counter
+- [x] **Test milestone**: Axis grids that can be toggled on/off and FPS counter
 
 ### 7. Lighting System
 - [ ] **Implement sun lighting**

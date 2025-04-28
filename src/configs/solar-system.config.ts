@@ -2,7 +2,7 @@ import type { ICelestialBody, ISolarSystemConfig } from '@/types/solar-system.ty
 import { colorConfig } from '@/configs/color.config'
 import * as THREE from 'three'
 
-const wireframe = false
+const wireframed = true
 
 export const solarSystemConfig: ISolarSystemConfig = {
   camera: {
@@ -45,8 +45,9 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     scale: 5,
     segments: 64,
     shininess: 0,
-    selfRotationSpeed: 0.001,
-    wireframe,
+    selfRotationSpeed: 0.1,
+    orbitalRotationSpeed: 0,
+    wireframed,
   },
   earth: {
     name: 'Earth',
@@ -58,8 +59,9 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     scale: 1,
     segments: 32,
     shininess: 15,
-    selfRotationSpeed: 0.001,
-    wireframe,
+    selfRotationSpeed: 0.3,
+    orbitalRotationSpeed: 0.5,
+    wireframed,
   },
   moon: {
     name: 'Moon',
@@ -71,8 +73,9 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     scale: 0.5,
     segments: 32,
     shininess: 40,
-    selfRotationSpeed: 0.001,
-    wireframe,
+    selfRotationSpeed: 0.01,
+    orbitalRotationSpeed: 0.1,
+    wireframed,
   },
   saturn: {
     name: 'Saturn',
@@ -85,6 +88,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     segments: 32,
     shininess: 10,
     selfRotationSpeed: 0.001,
-    wireframe,
+    orbitalRotationSpeed: 0.3,
+    wireframed,
   },
 }

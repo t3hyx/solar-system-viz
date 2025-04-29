@@ -82,7 +82,35 @@ export class SolarSystemService {
     solarSystem.add(sun)
     this.state.objects.push(sun)
 
-    // * Add Earth's orbit, trail, and Earth planet
+    // * Add Mercury's orbit, trail, and planet
+    const mercuryOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.mercury.distance, celestialBodiesConfig.mercury.name)
+    solarSystem.add(mercuryOrbit)
+    this.state.objects.push(mercuryOrbit)
+
+    const mercuryTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.mercury.distance, celestialBodiesConfig.mercury.name)
+    solarSystem.add(mercuryTrail)
+    this.state.objects.push(mercuryTrail)
+
+    const mercury = CelestialBodyFactory.createMercury()
+    mercury.position.x = celestialBodiesConfig.mercury.distance
+    mercuryOrbit.add(mercury)
+    this.state.objects.push(mercury)
+
+    // * Add Venus's orbit, trail, and planet
+    const venusOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.venus.distance, celestialBodiesConfig.venus.name)
+    solarSystem.add(venusOrbit)
+    this.state.objects.push(venusOrbit)
+
+    const venusTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.venus.distance, celestialBodiesConfig.venus.name)
+    solarSystem.add(venusTrail)
+    this.state.objects.push(venusTrail)
+
+    const venus = CelestialBodyFactory.createVenus()
+    venus.position.x = celestialBodiesConfig.venus.distance
+    venusOrbit.add(venus)
+    this.state.objects.push(venus)
+
+    // * Add Earth's orbit, trail, and planet
     const earthOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.earth.distance, celestialBodiesConfig.earth.name)
     solarSystem.add(earthOrbit)
     this.state.objects.push(earthOrbit)
@@ -96,7 +124,7 @@ export class SolarSystemService {
     earthOrbit.add(earth)
     this.state.objects.push(earth)
 
-    // * Add Moon's orbit, trail, and Moon planet
+    // * Add Moon's orbit, trail, and planet
     const moonOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.moon.distance, celestialBodiesConfig.moon.name)
     earth.add(moonOrbit)
 
@@ -109,7 +137,35 @@ export class SolarSystemService {
     moonOrbit.add(moon)
     this.state.objects.push(moon)
 
-    // * Add Saturn's orbit, trail, and Saturn with its rings
+    // * Add Mars's orbit, trail, and planet
+    const marsOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.mars.distance, celestialBodiesConfig.mars.name)
+    solarSystem.add(marsOrbit)
+    this.state.objects.push(marsOrbit)
+
+    const marsTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.mars.distance, celestialBodiesConfig.mars.name)
+    solarSystem.add(marsTrail)
+    this.state.objects.push(marsTrail)
+
+    const mars = CelestialBodyFactory.createMars()
+    mars.position.x = celestialBodiesConfig.mars.distance
+    marsOrbit.add(mars)
+    this.state.objects.push(mars)
+
+    // * Add Jupiter's orbit, trail, and planet
+    const jupiterOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.jupiter.distance, celestialBodiesConfig.jupiter.name)
+    solarSystem.add(jupiterOrbit)
+    this.state.objects.push(jupiterOrbit)
+
+    const jupiterTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.jupiter.distance, celestialBodiesConfig.jupiter.name)
+    solarSystem.add(jupiterTrail)
+    this.state.objects.push(jupiterTrail)
+
+    const jupiter = CelestialBodyFactory.createJupiter()
+    jupiter.position.x = celestialBodiesConfig.jupiter.distance
+    jupiterOrbit.add(jupiter)
+    this.state.objects.push(jupiter)
+
+    // * Add Saturn's orbit, trail, and planet with its rings
     const saturnOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.saturn.distance, celestialBodiesConfig.saturn.name)
     solarSystem.add(saturnOrbit)
     this.state.objects.push(saturnOrbit)
@@ -123,13 +179,80 @@ export class SolarSystemService {
     saturnOrbit.add(saturn)
     this.state.objects.push(saturn)
 
+    // * Add Uranus's orbit, trail, and planet
+    const uranusOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.uranus.distance, celestialBodiesConfig.uranus.name)
+    solarSystem.add(uranusOrbit)
+    this.state.objects.push(uranusOrbit)
+
+    const uranusTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.uranus.distance, celestialBodiesConfig.uranus.name)
+    solarSystem.add(uranusTrail)
+    this.state.objects.push(uranusTrail)
+
+    const uranus = CelestialBodyFactory.createUranus()
+    uranus.position.x = celestialBodiesConfig.uranus.distance
+    uranusOrbit.add(uranus)
+    this.state.objects.push(uranus)
+
+    // * Add Neptune's orbit, trail, and planet
+    const neptuneOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.neptune.distance, celestialBodiesConfig.neptune.name)
+    solarSystem.add(neptuneOrbit)
+    this.state.objects.push(neptuneOrbit)
+
+    const neptuneTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.neptune.distance, celestialBodiesConfig.neptune.name)
+    solarSystem.add(neptuneTrail)
+    this.state.objects.push(neptuneTrail)
+
+    const neptune = CelestialBodyFactory.createNeptune()
+    neptune.position.x = celestialBodiesConfig.neptune.distance
+    neptuneOrbit.add(neptune)
+    this.state.objects.push(neptune)
+
+    // * Add Pluto's orbit, trail, and planet
+    const plutoOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.pluto.distance, celestialBodiesConfig.pluto.name)
+    solarSystem.add(plutoOrbit)
+    this.state.objects.push(plutoOrbit)
+
+    const plutoTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.pluto.distance, celestialBodiesConfig.pluto.name)
+    solarSystem.add(plutoTrail)
+    this.state.objects.push(plutoTrail)
+
+    const pluto = CelestialBodyFactory.createPluto()
+    pluto.position.x = celestialBodiesConfig.pluto.distance
+    plutoOrbit.add(pluto)
+    this.state.objects.push(pluto)
+
     // * Add orbit visualization controls to GUI
     const orbitFolder = this.state.gui.addFolder('Orbit Visualizations')
     const orbitControls = {
-      earthOrbit: true,
-      moonOrbit: true,
-      saturnOrbit: true,
+      mercuryOrbit: false,
+      venusOrbit: false,
+      earthOrbit: false,
+      moonOrbit: false,
+      marsOrbit: false,
+      jupiterOrbit: false,
+      saturnOrbit: false,
+      uranusOrbit: false,
+      neptuneOrbit: false,
+      plutoOrbit: false,
     }
+
+    orbitFolder.add(orbitControls, 'mercuryOrbit')
+      .name('Mercury Orbit')
+      .onChange((value: boolean) => {
+        const mercuryOrbit = this.state.objects.find(obj => obj.name === 'orbit-Mercury')
+        if (mercuryOrbit?.userData.orbitMesh) {
+          mercuryOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'venusOrbit')
+      .name('Venus Orbit')
+      .onChange((value: boolean) => {
+        const venusOrbit = this.state.objects.find(obj => obj.name === 'orbit-Venus')
+        if (venusOrbit?.userData.orbitMesh) {
+          venusOrbit.userData.orbitMesh.visible = value
+        }
+      })
 
     orbitFolder.add(orbitControls, 'earthOrbit')
       .name('Earth Orbit')
@@ -152,6 +275,24 @@ export class SolarSystemService {
         }
       })
 
+    orbitFolder.add(orbitControls, 'marsOrbit')
+      .name('Mars Orbit')
+      .onChange((value: boolean) => {
+        const marsOrbit = this.state.objects.find(obj => obj.name === 'orbit-Mars')
+        if (marsOrbit?.userData.orbitMesh) {
+          marsOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'jupiterOrbit')
+      .name('Jupiter Orbit')
+      .onChange((value: boolean) => {
+        const jupiterOrbit = this.state.objects.find(obj => obj.name === 'orbit-Jupiter')
+        if (jupiterOrbit?.userData.orbitMesh) {
+          jupiterOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
     orbitFolder.add(orbitControls, 'saturnOrbit')
       .name('Saturn Orbit')
       .onChange((value: boolean) => {
@@ -161,22 +302,63 @@ export class SolarSystemService {
         }
       })
 
+    orbitFolder.add(orbitControls, 'uranusOrbit')
+      .name('Uranus Orbit')
+      .onChange((value: boolean) => {
+        const uranusOrbit = this.state.objects.find(obj => obj.name === 'orbit-Uranus')
+        if (uranusOrbit?.userData.orbitMesh) {
+          uranusOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'neptuneOrbit')
+      .name('Neptune Orbit')
+      .onChange((value: boolean) => {
+        const neptuneOrbit = this.state.objects.find(obj => obj.name === 'orbit-Neptune')
+        if (neptuneOrbit?.userData.orbitMesh) {
+          neptuneOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'plutoOrbit')
+      .name('Pluto Orbit')
+      .onChange((value: boolean) => {
+        const plutoOrbit = this.state.objects.find(obj => obj.name === 'orbit-Pluto')
+        if (plutoOrbit?.userData.orbitMesh) {
+          plutoOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
     // * Add axis and grid to all objects -- not intended to be used in production
     this.addAxisGrid(solarSystem, 100, '-- Solar System --')
     this.addAxisGrid(sun, 3, 'Sun')
+    this.addAxisGrid(mercury, 3, 'Mercury')
+    this.addAxisGrid(venus, 3, 'Venus')
     this.addAxisGrid(earth, 3, 'Earth')
     this.addAxisGrid(moon, 1, 'Moon')
-    this.addAxisGrid(saturn, 10, 'Saturn')
+    this.addAxisGrid(mars, 3, 'Mars')
+    this.addAxisGrid(jupiter, 3, 'Jupiter')
+    this.addAxisGrid(saturn, 3, 'Saturn')
+    this.addAxisGrid(uranus, 3, 'Uranus')
+    this.addAxisGrid(neptune, 3, 'Neptune')
+    this.addAxisGrid(pluto, 3, 'Pluto')
+    this.addAxisGrid(mercuryOrbit, 5, 'orbit-Mercury')
+    this.addAxisGrid(venusOrbit, 5, 'orbit-Venus')
     this.addAxisGrid(earthOrbit, 5, 'orbit-Earth')
     this.addAxisGrid(moonOrbit, 3, 'orbit-Moon')
+    this.addAxisGrid(marsOrbit, 5, 'orbit-Mars')
+    this.addAxisGrid(jupiterOrbit, 5, 'orbit-Jupiter')
     this.addAxisGrid(saturnOrbit, 15, 'orbit-Saturn')
+    this.addAxisGrid(uranusOrbit, 15, 'orbit-Uranus')
+    this.addAxisGrid(neptuneOrbit, 15, 'orbit-Neptune')
+    this.addAxisGrid(plutoOrbit, 15, 'orbit-Pluto')
   }
 
   // ! ===== PRIVATE METHODS =====
   // # Main
   // * Initializes the state of the solar system
   private initializeState(container: HTMLElement): ISolarSystemState {
-    // Create core components
+    // create core components
     const renderer = this.createRenderer(container)
     const camera = this.createCamera(container)
     const scene = this.createScene()
@@ -326,6 +508,28 @@ export class SolarSystemService {
       sun.rotation.y += deltaTime * celestialBodiesConfig.sun.selfRotationSpeed
     }
 
+    // animate the mercury orbit and mercury
+    const mercuryOrbit = this.state.objects.find(object => object.name === 'orbit-Mercury') as THREE.Object3D
+    if (mercuryOrbit) {
+      mercuryOrbit.rotation.y += deltaTime * celestialBodiesConfig.mercury.orbitalRotationSpeed
+    }
+
+    const mercury = this.state.objects.find(object => object.name === 'Mercury') as THREE.Object3D
+    if (mercury) {
+      mercury.rotation.y += deltaTime * celestialBodiesConfig.mercury.selfRotationSpeed
+    }
+
+    // animate the venus orbit and venus
+    const venusOrbit = this.state.objects.find(object => object.name === 'orbit-Venus') as THREE.Object3D
+    if (venusOrbit) {
+      venusOrbit.rotation.y += deltaTime * celestialBodiesConfig.venus.orbitalRotationSpeed
+    }
+
+    const venus = this.state.objects.find(object => object.name === 'Venus') as THREE.Object3D
+    if (venus) {
+      venus.rotation.y += deltaTime * celestialBodiesConfig.venus.selfRotationSpeed
+    }
+
     // animate the earth orbit and earth
     const earthOrbit = this.state.objects.find(object => object.name === 'orbit-Earth') as THREE.Object3D
     if (earthOrbit) {
@@ -348,6 +552,28 @@ export class SolarSystemService {
       moon.rotation.y += deltaTime * celestialBodiesConfig.moon.selfRotationSpeed
     }
 
+    // animate the mars orbit and mars
+    const marsOrbit = this.state.objects.find(object => object.name === 'orbit-Mars') as THREE.Object3D
+    if (marsOrbit) {
+      marsOrbit.rotation.y += deltaTime * celestialBodiesConfig.mars.orbitalRotationSpeed
+    }
+
+    const mars = this.state.objects.find(object => object.name === 'Mars') as THREE.Object3D
+    if (mars) {
+      mars.rotation.y += deltaTime * celestialBodiesConfig.mars.selfRotationSpeed
+    }
+
+    // animate the jupiter orbit and jupiter
+    const jupiterOrbit = this.state.objects.find(object => object.name === 'orbit-Jupiter') as THREE.Object3D
+    if (jupiterOrbit) {
+      jupiterOrbit.rotation.y += deltaTime * celestialBodiesConfig.jupiter.orbitalRotationSpeed
+    }
+
+    const jupiter = this.state.objects.find(object => object.name === 'Jupiter') as THREE.Object3D
+    if (jupiter) {
+      jupiter.rotation.y += deltaTime * celestialBodiesConfig.jupiter.selfRotationSpeed
+    }
+
     // animate the saturn orbit and saturn
     const saturnOrbit = this.state.objects.find(object => object.name === 'orbit-Saturn') as THREE.Object3D
     if (saturnOrbit) {
@@ -357,6 +583,39 @@ export class SolarSystemService {
     const saturn = this.state.objects.find(object => object.name === 'Saturn') as THREE.Object3D
     if (saturn) {
       saturn.rotation.y += deltaTime * celestialBodiesConfig.saturn.selfRotationSpeed
+    }
+
+    // animate the uranus orbit and uranus
+    const uranusOrbit = this.state.objects.find(object => object.name === 'orbit-Uranus') as THREE.Object3D
+    if (uranusOrbit) {
+      uranusOrbit.rotation.y += deltaTime * celestialBodiesConfig.uranus.orbitalRotationSpeed
+    }
+
+    const uranus = this.state.objects.find(object => object.name === 'Uranus') as THREE.Object3D
+    if (uranus) {
+      uranus.rotation.y += deltaTime * celestialBodiesConfig.uranus.selfRotationSpeed
+    }
+
+    // animate the neptune orbit and neptune
+    const neptuneOrbit = this.state.objects.find(object => object.name === 'orbit-Neptune') as THREE.Object3D
+    if (neptuneOrbit) {
+      neptuneOrbit.rotation.y += deltaTime * celestialBodiesConfig.neptune.orbitalRotationSpeed
+    }
+
+    const neptune = this.state.objects.find(object => object.name === 'Neptune') as THREE.Object3D
+    if (neptune) {
+      neptune.rotation.y += deltaTime * celestialBodiesConfig.neptune.selfRotationSpeed
+    }
+
+    // animate the pluto orbit and pluto
+    const plutoOrbit = this.state.objects.find(object => object.name === 'orbit-Pluto') as THREE.Object3D
+    if (plutoOrbit) {
+      plutoOrbit.rotation.y += deltaTime * celestialBodiesConfig.pluto.orbitalRotationSpeed
+    }
+
+    const pluto = this.state.objects.find(object => object.name === 'Pluto') as THREE.Object3D
+    if (pluto) {
+      pluto.rotation.y += deltaTime * celestialBodiesConfig.pluto.selfRotationSpeed
     }
   }
 }

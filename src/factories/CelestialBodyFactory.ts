@@ -43,6 +43,31 @@ export class CelestialBodyFactory {
     return orbit
   }
 
+  // * Creates an orbit trail for a celestial body
+  public static createOrbitTrail(distance: number, bodyName: string): THREE.Line {
+    const points = []
+    const segments = 64
+    for (let i = 0; i <= segments; i++) {
+      const angle = (i / segments) * Math.PI * 2
+      const x = Math.cos(angle) * distance
+      const z = Math.sin(angle) * distance
+      points.push(new THREE.Vector3(x, 0, z))
+    }
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points)
+    const material = new THREE.LineBasicMaterial({
+      color: 0x666666,
+      transparent: true,
+      opacity: 0.5,
+      linewidth: 1,
+    })
+
+    const trail = new THREE.Line(geometry, material)
+    trail.name = `trail-${bodyName}`
+
+    return trail
+  }
+
   // * Sun
   public static createSun(): THREE.Mesh {
     return this.createCelestialBody({

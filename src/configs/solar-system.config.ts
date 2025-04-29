@@ -4,12 +4,43 @@ import * as THREE from 'three'
 
 const wireframed = true
 
+const _ua = 149597870.7 // km
+// * 1 AU = 25 Three.js units
+const au_to_x = 25
+
+// Real planet radii in km
+const planetRadii = {
+  sun: 696340, // Sun
+  mercury: 2439.7, // Mercury
+  venus: 6051.8, // Venus
+  earth: 6371.0, // Earth
+  moon: 1737.4, // Moon
+  mars: 3389.5, // Mars
+  jupiter: 69911, // Jupiter
+  saturn: 58232, // Saturn
+  uranus: 25362, // Uranus
+  neptune: 24622, // Neptune
+  pluto: 1188.3, // Pluto
+}
+
+// Scale factor to convert km to Three.js units
+// Using Earth as reference: 6371 km = 1 unit
+const km_to_x = 1 / 6371
+
+// Calculate minimum safe distance for planets (1.5 times Sun's radius)
+const sunRadius = planetRadii.sun * km_to_x
+const minSafeDistance = sunRadius * 1.5
+
+// Scale factor for orbital distances to ensure planets are visible
+// Using Mercury's real distance (0.387 AU) as reference
+const distanceScaleFactor = minSafeDistance / (0.387 * au_to_x)
+
 export const solarSystemConfig: ISolarSystemConfig = {
   camera: {
     fov: 75,
     near: 0.1,
-    far: 1000,
-    position: new THREE.Vector3(0, 0, 50),
+    far: 100000,
+    position: new THREE.Vector3(0, 0, 1000),
   },
   background: {
     color: colorConfig.pureBlack,
@@ -29,7 +60,7 @@ export const solarSystemConfig: ISolarSystemConfig = {
   stars: {
     color: colorConfig.pureWhite,
     count: 5000,
-    size: 0.5,
+    size: 3,
     sizeAttenuation: true,
   },
   trails: {
@@ -50,7 +81,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     color: colorConfig.sunYellow,
     emissive: colorConfig.sunraysOrange,
     emissiveIntensity: 1,
-    scale: 5,
+    scale: planetRadii.sun * km_to_x,
     segments: 64,
     shininess: 0,
     selfRotationSpeed: 0.1,
@@ -60,11 +91,11 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   mercury: {
     name: 'Mercury',
     radius: 1,
-    distance: 15,
+    distance: 0.387 * au_to_x * distanceScaleFactor,
     color: colorConfig.mercuryBrown,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 1,
+    scale: planetRadii.mercury * km_to_x * 2,
     segments: 32,
     shininess: 15,
     selfRotationSpeed: 0.3,
@@ -74,11 +105,11 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   venus: {
     name: 'Venus',
     radius: 1,
-    distance: 20,
+    distance: 0.723 * au_to_x * distanceScaleFactor,
     color: colorConfig.venusYellow,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 1,
+    scale: planetRadii.venus * km_to_x * 2,
     segments: 32,
     shininess: 15,
     selfRotationSpeed: 0.3,
@@ -88,11 +119,11 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   earth: {
     name: 'Earth',
     radius: 1,
-    distance: 15,
+    distance: 1.000 * au_to_x * distanceScaleFactor,
     color: colorConfig.earthBlue,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 1,
+    scale: planetRadii.earth * km_to_x * 2,
     segments: 32,
     shininess: 15,
     selfRotationSpeed: 0.3,
@@ -101,12 +132,12 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   },
   moon: {
     name: 'Moon',
-    radius: 0.5,
-    distance: 2,
+    radius: 1,
+    distance: 0.00257 * au_to_x * distanceScaleFactor,
     color: colorConfig.moonGrey,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 0.5,
+    scale: planetRadii.moon * km_to_x * 2,
     segments: 32,
     shininess: 40,
     selfRotationSpeed: 0.01,
@@ -116,11 +147,11 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   mars: {
     name: 'Mars',
     radius: 1,
-    distance: 20,
+    distance: 1.524 * au_to_x * distanceScaleFactor,
     color: colorConfig.marsRed,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 1,
+    scale: planetRadii.mars * km_to_x * 2,
     segments: 32,
     shininess: 15,
     selfRotationSpeed: 0.3,
@@ -130,11 +161,11 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   jupiter: {
     name: 'Jupiter',
     radius: 1,
-    distance: 30,
+    distance: 5.203 * au_to_x * distanceScaleFactor,
     color: colorConfig.jupiterOrange,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 1,
+    scale: planetRadii.jupiter * km_to_x * 2,
     segments: 32,
     shininess: 15,
     selfRotationSpeed: 0.3,
@@ -144,11 +175,11 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   saturn: {
     name: 'Saturn',
     radius: 1,
-    distance: 40,
+    distance: 9.537 * au_to_x * distanceScaleFactor,
     color: colorConfig.saturnYellow,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 2.5,
+    scale: planetRadii.saturn * km_to_x * 2,
     segments: 32,
     shininess: 10,
     selfRotationSpeed: 0.001,
@@ -158,11 +189,11 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   uranus: {
     name: 'Uranus',
     radius: 1,
-    distance: 50,
+    distance: 19.191 * au_to_x * distanceScaleFactor,
     color: colorConfig.uranusCyan,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 1,
+    scale: planetRadii.uranus * km_to_x * 2,
     segments: 32,
     shininess: 15,
     selfRotationSpeed: 0.3,
@@ -172,11 +203,11 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   neptune: {
     name: 'Neptune',
     radius: 1,
-    distance: 60,
+    distance: 30.069 * au_to_x * distanceScaleFactor,
     color: colorConfig.neptuneBlue,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 1,
+    scale: planetRadii.neptune * km_to_x * 2,
     segments: 32,
     shininess: 15,
     selfRotationSpeed: 0.3,
@@ -186,11 +217,11 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   pluto: {
     name: 'Pluto',
     radius: 1,
-    distance: 70,
+    distance: 39.482 * au_to_x * distanceScaleFactor,
     color: colorConfig.plutoGrey,
     emissive: colorConfig.pureBlack,
     emissiveIntensity: 0,
-    scale: 1,
+    scale: planetRadii.pluto * km_to_x * 2,
     segments: 32,
     shininess: 15,
     selfRotationSpeed: 0.3,

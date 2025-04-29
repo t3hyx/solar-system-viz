@@ -30,6 +30,14 @@ export interface ISolarSystemConfig {
     size: number
     sizeAttenuation: boolean
   }
+  trails: {
+    color: number
+    opacity: number
+    linewidth: number
+    segments: number
+    transparent: boolean
+    side: THREE.Side
+  }
 }
 
 export interface ISolarSystemState {
@@ -55,4 +63,8 @@ export interface ICelestialBody {
   segments: number
   shininess: number
   wireframed: boolean
+  side?: THREE.Side
+  linewidth?: number
+  transparent?: boolean
+  opacity?: number
 }

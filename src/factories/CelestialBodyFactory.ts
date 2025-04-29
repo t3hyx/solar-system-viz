@@ -43,6 +43,7 @@ export class CelestialBodyFactory {
     orbit.add(orbitMesh)
 
     orbit.userData.orbitMesh = orbitMesh
+    orbit.userData.orbitMesh.visible = false
 
     return orbit
   }

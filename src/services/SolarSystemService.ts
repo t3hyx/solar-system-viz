@@ -82,31 +82,43 @@ export class SolarSystemService {
     solarSystem.add(sun)
     this.state.objects.push(sun)
 
-    // * Add Earth's orbit, and Earth planet on it
+    // * Add Earth's orbit, trail, and Earth planet
     const earthOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.earth.distance, celestialBodiesConfig.earth.name)
     solarSystem.add(earthOrbit)
     this.state.objects.push(earthOrbit)
+
+    const earthTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.earth.distance, celestialBodiesConfig.earth.name)
+    solarSystem.add(earthTrail)
+    this.state.objects.push(earthTrail)
 
     const earth = CelestialBodyFactory.createEarth()
     earth.position.x = celestialBodiesConfig.earth.distance
     earthOrbit.add(earth)
     this.state.objects.push(earth)
 
-    // * Add Moon's orbit, and Moon planet on it
+    // * Add Moon's orbit, trail, and Moon planet
     const moonOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.moon.distance, celestialBodiesConfig.moon.name)
-    earth.add(moonOrbit) // Attach moon orbit to Earth (not Earth's orbit)
+    earth.add(moonOrbit)
+
+    const moonTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.moon.distance, celestialBodiesConfig.moon.name)
+    earth.add(moonTrail)
+    this.state.objects.push(moonTrail)
 
     const moon = CelestialBodyFactory.createMoon()
     moon.position.x = celestialBodiesConfig.moon.distance
     moonOrbit.add(moon)
     this.state.objects.push(moon)
 
-    // * Add Saturn's orbit, and Saturn with its rings, on it
+    // * Add Saturn's orbit, trail, and Saturn with its rings
     const saturnOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.saturn.distance, celestialBodiesConfig.saturn.name)
     solarSystem.add(saturnOrbit)
     this.state.objects.push(saturnOrbit)
 
-    const saturn = CelestialBodyFactory.createSaturnWithRings() // edge-case: Saturn is a group because of its rings
+    const saturnTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.saturn.distance, celestialBodiesConfig.saturn.name)
+    solarSystem.add(saturnTrail)
+    this.state.objects.push(saturnTrail)
+
+    const saturn = CelestialBodyFactory.createSaturnWithRings()
     saturn.position.x = celestialBodiesConfig.saturn.distance
     saturnOrbit.add(saturn)
     this.state.objects.push(saturn)
@@ -131,10 +143,8 @@ export class SolarSystemService {
     orbitFolder.add(orbitControls, 'moonOrbit')
       .name('Moon Orbit')
       .onChange((value: boolean) => {
-        // Find Earth first
         const earth = this.state.objects.find(obj => obj.name === 'Earth')
         if (earth) {
-          // Find Moon orbit among Earth's children
           const moonOrbit = earth.children.find(child => child.name === 'orbit-Moon')
           if (moonOrbit?.userData.orbitMesh) {
             moonOrbit.userData.orbitMesh.visible = value

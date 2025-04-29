@@ -44,9 +44,14 @@ export class SolarSystemService {
   }
 
   // * Adds axis and grid to a node -- not intended to be used in production
-  public addAxisGrid(node: THREE.Object3D, units: number, label: string): void {
+  public addAxisGrid(node: THREE.Object3D, units: number, label: string, folder?: GUI): void {
     const helper = new AxisGridsHelper(node, units)
-    this.state.gui.add(helper, 'visible').name(label)
+    if (folder) {
+      folder.add(helper, 'visible').name(label)
+    }
+    else {
+      this.state.gui.add(helper, 'visible').name(label)
+    }
   }
 
   // * Handles window resize events if any
@@ -66,6 +71,7 @@ export class SolarSystemService {
   // # Solar System
   public createSolarSystem(): void {
     // * Setup GUI -- not intended to be used in production
+    // FPS counter
     const fpsFolder = this.state.gui.addFolder('FPS')
     fpsFolder.add(this.fpsCounter, 'value').name('FPS').listen()
 
@@ -330,28 +336,34 @@ export class SolarSystemService {
       })
 
     // * Add axis and grid to all objects -- not intended to be used in production
-    this.addAxisGrid(solarSystem, 100, '-- Solar System --')
-    this.addAxisGrid(sun, 3, 'Sun')
-    this.addAxisGrid(mercury, 3, 'Mercury')
-    this.addAxisGrid(venus, 3, 'Venus')
-    this.addAxisGrid(earth, 3, 'Earth')
-    this.addAxisGrid(moon, 1, 'Moon')
-    this.addAxisGrid(mars, 3, 'Mars')
-    this.addAxisGrid(jupiter, 3, 'Jupiter')
-    this.addAxisGrid(saturn, 3, 'Saturn')
-    this.addAxisGrid(uranus, 3, 'Uranus')
-    this.addAxisGrid(neptune, 3, 'Neptune')
-    this.addAxisGrid(pluto, 3, 'Pluto')
-    this.addAxisGrid(mercuryOrbit, 5, 'orbit-Mercury')
-    this.addAxisGrid(venusOrbit, 5, 'orbit-Venus')
-    this.addAxisGrid(earthOrbit, 5, 'orbit-Earth')
-    this.addAxisGrid(moonOrbit, 3, 'orbit-Moon')
-    this.addAxisGrid(marsOrbit, 5, 'orbit-Mars')
-    this.addAxisGrid(jupiterOrbit, 5, 'orbit-Jupiter')
-    this.addAxisGrid(saturnOrbit, 15, 'orbit-Saturn')
-    this.addAxisGrid(uranusOrbit, 15, 'orbit-Uranus')
-    this.addAxisGrid(neptuneOrbit, 15, 'orbit-Neptune')
-    this.addAxisGrid(plutoOrbit, 15, 'orbit-Pluto')
+    const axesGridsFolder = this.state.gui.addFolder('Axes & Grids')
+
+    // Planets section
+    const planetsFolder = axesGridsFolder.addFolder('Planets')
+    this.addAxisGrid(sun, 3, 'Sun', planetsFolder)
+    this.addAxisGrid(mercury, 3, 'Mercury', planetsFolder)
+    this.addAxisGrid(venus, 3, 'Venus', planetsFolder)
+    this.addAxisGrid(earth, 3, 'Earth', planetsFolder)
+    this.addAxisGrid(moon, 1, 'Moon', planetsFolder)
+    this.addAxisGrid(mars, 3, 'Mars', planetsFolder)
+    this.addAxisGrid(jupiter, 3, 'Jupiter', planetsFolder)
+    this.addAxisGrid(saturn, 3, 'Saturn', planetsFolder)
+    this.addAxisGrid(uranus, 3, 'Uranus', planetsFolder)
+    this.addAxisGrid(neptune, 3, 'Neptune', planetsFolder)
+    this.addAxisGrid(pluto, 3, 'Pluto', planetsFolder)
+
+    // Orbits section
+    const orbitsFolder = axesGridsFolder.addFolder('Orbits')
+    this.addAxisGrid(mercuryOrbit, 5, 'Mercury', orbitsFolder)
+    this.addAxisGrid(venusOrbit, 5, 'Venus', orbitsFolder)
+    this.addAxisGrid(earthOrbit, 5, 'Earth', orbitsFolder)
+    this.addAxisGrid(moonOrbit, 3, 'Moon', orbitsFolder)
+    this.addAxisGrid(marsOrbit, 5, 'Mars', orbitsFolder)
+    this.addAxisGrid(jupiterOrbit, 5, 'Jupiter', orbitsFolder)
+    this.addAxisGrid(saturnOrbit, 15, 'Saturn', orbitsFolder)
+    this.addAxisGrid(uranusOrbit, 15, 'Uranus', orbitsFolder)
+    this.addAxisGrid(neptuneOrbit, 15, 'Neptune', orbitsFolder)
+    this.addAxisGrid(plutoOrbit, 15, 'Pluto', orbitsFolder)
   }
 
   // ! ===== PRIVATE METHODS =====
@@ -382,17 +394,21 @@ export class SolarSystemService {
     const currentTime = performance.now()
     const deltaTime = (currentTime - this.lastTime) / 1000
     this.lastTime = currentTime
+
     // step2: update fps counter -- not intended to be used in production
     this.updateFPSCounter(currentTime)
-    // step3: animate animateObjects
+
+    // step3: animate objects
     this.animateObjects(deltaTime)
+
     // step4: update controls
     this.state.controls.update()
+
     // step5: render
     this.state.renderer.render(this.state.scene, this.state.camera)
+
     // step6: request next frame
     this.state.animationFrameId = requestAnimationFrame(() => this.animate())
-    // console.log('animation is running')
   }
 
   // # Helpers
@@ -425,25 +441,47 @@ export class SolarSystemService {
   }
 
   // * Creates random-positioned stars for the scene background
-  private createStars() {
-    const starsGeometry = new THREE.BufferGeometry()
-    const starsMaterial = new THREE.PointsMaterial({
-      color: this.config.stars.color,
-      size: this.config.stars.size,
-      sizeAttenuation: this.config.stars.sizeAttenuation,
-    })
+  private createStars(): THREE.Points {
+    const geometry = new THREE.BufferGeometry()
+    const positions = new Float32Array(this.config.stars.count * 3)
+    const colors = new Float32Array(this.config.stars.count * 3)
 
-    const starsVertices = []
+    // Create a sphere of stars around the solar system
+    const radius = 30000 // Reduced radius to make stars more visible
+    const color = new THREE.Color(this.config.stars.color)
+
     for (let i = 0; i < this.config.stars.count; i++) {
-      const x = (Math.random() - 0.5) * 2000
-      const y = (Math.random() - 0.5) * 2000
-      const z = (Math.random() - 0.5) * 2000
-      starsVertices.push(x, y, z)
+      // Generate random points on a sphere using spherical coordinates
+      const theta = Math.random() * Math.PI * 2 // Random angle around Y axis
+      const phi = Math.acos(2 * Math.random() - 1) // Random angle from Y axis
+      
+      // Convert spherical coordinates to Cartesian
+      const x = radius * Math.sin(phi) * Math.cos(theta)
+      const y = radius * Math.sin(phi) * Math.sin(theta)
+      const z = radius * Math.cos(phi)
+
+      positions[i * 3] = x
+      positions[i * 3 + 1] = y
+      positions[i * 3 + 2] = z
+
+      colors[i * 3] = color.r
+      colors[i * 3 + 1] = color.g
+      colors[i * 3 + 2] = color.b
     }
 
-    starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3))
-    const stars = new THREE.Points(starsGeometry, starsMaterial)
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
 
+    const material = new THREE.PointsMaterial({
+      size: this.config.stars.size,
+      sizeAttenuation: this.config.stars.sizeAttenuation,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.8,
+    })
+
+    const stars = new THREE.Points(geometry, material)
+    stars.name = 'stars' // Name the stars object so we can find it later
     return stars
   }
 
@@ -453,7 +491,9 @@ export class SolarSystemService {
     scene.background = new THREE.Color(this.config.background.color)
 
     // add the stars
-    scene.add(this.createStars())
+    const stars = this.createStars()
+    scene.add(stars)
+    console.log('Stars added to scene:', stars) // Debug log
 
     return scene
   }
@@ -463,6 +503,12 @@ export class SolarSystemService {
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enableDamping = true
     controls.dampingFactor = 0.05
+
+    // Set camera limits
+    controls.minDistance = 5 // Minimum zoom distance
+    controls.maxDistance = 27000 // Maximum zoom distance
+    controls.maxPolarAngle = Math.PI / 2 // Prevent going below the solar system plane
+    controls.minPolarAngle = 0 // Prevent going above the solar system plane
 
     return controls
   }

@@ -19,6 +19,9 @@ export class CelestialBodyFactory {
     mesh.scale.set(body.scale, body.scale, body.scale)
     mesh.name = body.name
 
+    // Apply inclination (tilt of the planet's axis)
+    mesh.rotation.z = THREE.MathUtils.degToRad(body.inclination)
+
     return mesh
   }
 
@@ -41,6 +44,12 @@ export class CelestialBodyFactory {
     })
     const orbitMesh = new THREE.Mesh(orbitGeometry, orbitMaterial)
     orbit.add(orbitMesh)
+
+    // Apply orbit inclination
+    const body = this.config[bodyName.toLowerCase()]
+    if (body) {
+      orbit.rotation.x = THREE.MathUtils.degToRad(body.orbitInclination)
+    }
 
     orbit.userData.orbitMesh = orbitMesh
     orbit.userData.orbitMesh.visible = false
@@ -71,6 +80,12 @@ export class CelestialBodyFactory {
     const orbitTrail = new THREE.Line(geometry, material)
     orbitTrail.name = `trail-${bodyName}`
 
+    // Apply orbit inclination
+    const body = this.config[bodyName.toLowerCase()]
+    if (body) {
+      orbitTrail.rotation.x = THREE.MathUtils.degToRad(body.orbitInclination)
+    }
+
     return orbitTrail
   }
 
@@ -89,6 +104,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.sun.selfRotationSpeed,
       orbitalRotationSpeed: this.config.sun.orbitalRotationSpeed,
       wireframed: this.config.sun.wireframed,
+      inclination: this.config.sun.inclination,
+      orbitInclination: this.config.sun.orbitInclination,
     })
   }
 
@@ -107,6 +124,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.mercury.selfRotationSpeed,
       orbitalRotationSpeed: this.config.mercury.orbitalRotationSpeed,
       wireframed: this.config.mercury.wireframed,
+      inclination: this.config.mercury.inclination,
+      orbitInclination: this.config.mercury.orbitInclination,
     })
   }
 
@@ -125,6 +144,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.venus.selfRotationSpeed,
       orbitalRotationSpeed: this.config.venus.orbitalRotationSpeed,
       wireframed: this.config.venus.wireframed,
+      inclination: this.config.venus.inclination,
+      orbitInclination: this.config.venus.orbitInclination,
     })
   }
 
@@ -143,6 +164,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.earth.selfRotationSpeed,
       orbitalRotationSpeed: this.config.earth.orbitalRotationSpeed,
       wireframed: this.config.earth.wireframed,
+      inclination: this.config.earth.inclination,
+      orbitInclination: this.config.earth.orbitInclination,
     })
   }
 
@@ -161,6 +184,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.moon.selfRotationSpeed,
       orbitalRotationSpeed: this.config.moon.orbitalRotationSpeed,
       wireframed: this.config.moon.wireframed,
+      inclination: this.config.moon.inclination,
+      orbitInclination: this.config.moon.orbitInclination,
     })
   }
 
@@ -179,6 +204,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.mars.selfRotationSpeed,
       orbitalRotationSpeed: this.config.mars.orbitalRotationSpeed,
       wireframed: this.config.mars.wireframed,
+      inclination: this.config.mars.inclination,
+      orbitInclination: this.config.mars.orbitInclination,
     })
   }
 
@@ -197,6 +224,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.jupiter.selfRotationSpeed,
       orbitalRotationSpeed: this.config.jupiter.orbitalRotationSpeed,
       wireframed: this.config.jupiter.wireframed,
+      inclination: this.config.jupiter.inclination,
+      orbitInclination: this.config.jupiter.orbitInclination,
     })
   }
 
@@ -225,6 +254,8 @@ export class CelestialBodyFactory {
       this.config.saturn.scale,
       this.config.saturn.scale,
     )
+    // Apply inclination
+    saturn.rotation.z = THREE.MathUtils.degToRad(this.config.saturn.inclination)
     saturnGroup.add(saturn)
 
     // create rings
@@ -259,6 +290,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.uranus.selfRotationSpeed,
       orbitalRotationSpeed: this.config.uranus.orbitalRotationSpeed,
       wireframed: this.config.uranus.wireframed,
+      inclination: this.config.uranus.inclination,
+      orbitInclination: this.config.uranus.orbitInclination,
     })
   }
 
@@ -277,6 +310,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.neptune.selfRotationSpeed,
       orbitalRotationSpeed: this.config.neptune.orbitalRotationSpeed,
       wireframed: this.config.neptune.wireframed,
+      inclination: this.config.neptune.inclination,
+      orbitInclination: this.config.neptune.orbitInclination,
     })
   }
 
@@ -295,6 +330,8 @@ export class CelestialBodyFactory {
       selfRotationSpeed: this.config.pluto.selfRotationSpeed,
       orbitalRotationSpeed: this.config.pluto.orbitalRotationSpeed,
       wireframed: this.config.pluto.wireframed,
+      inclination: this.config.pluto.inclination,
+      orbitInclination: this.config.pluto.orbitInclination,
     })
   }
 }

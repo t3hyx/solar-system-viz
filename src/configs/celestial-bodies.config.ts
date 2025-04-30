@@ -1,12 +1,5 @@
-import type { ICelestialBody, ISolarSystemConfig } from '@/types/solar-system.types'
+import type { ICelestialBody } from '@/types/solar-system.types'
 import { colorConfig } from '@/configs/color.config'
-import * as THREE from 'three'
-
-const wireframed = false
-
-// * Distance scaling
-// * 1 AU = 25 Three.js units (this determines the scale of the solar system)
-const au_to_x = 25
 
 // * Size scaling
 // Using Earth as reference: 6371 km = 1 unit
@@ -14,6 +7,10 @@ const au_to_x = 25
 // - Earth's radius (6371 km) will be 1 unit
 // - Other planets' sizes will be scaled relative to Earth
 const km_to_x = 1 / 6371
+
+// * Distance scaling
+// 1 AU = 25 Three.js units (this determines the scale of the solar system)
+const au_to_x = 25
 
 // Calculate minimum safe distance for planets (1.5 times Sun's radius)
 // This ensures planets don't overlap with the Sun
@@ -23,97 +20,6 @@ const minSafeDistance = sunRadius * 1.5
 // Scale factor for orbital distances to ensure planets are visible
 // Using Mercury's real distance (0.387 AU) as reference
 const distanceScaleFactor = minSafeDistance / (0.387 * au_to_x)
-
-export const solarSystemConfig: ISolarSystemConfig = {
-  camera: {
-    fov: 75,
-    near: 0.1,
-    far: 100000,
-    position: new THREE.Vector3(0, 0, 1000),
-  },
-  background: {
-    color: colorConfig.pureBlack,
-  },
-  lights: {
-    sun: {
-      color: colorConfig.pureWhite,
-      intensity: 300.00,
-      distance: 15000,
-      decay: 2.00,
-    },
-    ambient: {
-      color: colorConfig.ambientGrey,
-      intensity: 1,
-    },
-  },
-  stars: {
-    color: colorConfig.pureWhite,
-    count: 5000,
-    size: 3,
-    sizeAttenuation: true,
-  },
-  trails: {
-    color: colorConfig.trailGrey,
-    opacity: 0.5,
-    linewidth: 1,
-    segments: 128,
-    transparent: true,
-    side: THREE.DoubleSide,
-  },
-  scene: {
-    camera: {
-      fov: 75,
-      near: 0.1,
-      far: 100000,
-      position: new THREE.Vector3(0, 0, 1000),
-    },
-    background: {
-      color: colorConfig.pureBlack,
-    },
-    lights: {
-      sun: {
-        color: colorConfig.pureWhite,
-        intensity: 300.00,
-        distance: 15000,
-        decay: 2.00,
-      },
-      ambient: {
-        color: colorConfig.ambientGrey,
-        intensity: 1,
-      },
-    },
-    stars: {
-      color: colorConfig.pureWhite,
-      count: 5000,
-      size: 3,
-      sizeAttenuation: true,
-    },
-    controls: {
-      minDistance: 10,
-      maxDistance: 1000,
-      maxPolarAngle: Math.PI / 2,
-      minPolarAngle: 0,
-      dampingFactor: 0.05,
-    },
-  },
-  gui: {
-    trails: {
-      color: colorConfig.trailGrey,
-      opacity: 0.5,
-      linewidth: 1,
-      segments: 128,
-      transparent: true,
-      side: THREE.DoubleSide,
-    },
-    fps: {
-      updateInterval: 1000,
-    },
-    axisGrid: {
-      units: 10,
-    },
-  },
-  celestialBodies: [],
-}
 
 export const celestialBodiesConfig: Record<string, ICelestialBody> = {
   sun: {
@@ -130,7 +36,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0,
     inclination: 0, // degrees
     orbitInclination: 0, // degrees
-    wireframed,
+    wireframed: false,
   },
   mercury: {
     name: 'Mercury',
@@ -146,7 +52,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.011, // 88 Earth days
     inclination: 0.034, // degrees
     orbitInclination: 7.0, // degrees
-    wireframed,
+    wireframed: false,
   },
   venus: {
     name: 'Venus',
@@ -162,7 +68,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.008, // 225 Earth days
     inclination: 177.4, // degrees (retrograde)
     orbitInclination: 3.4, // degrees
-    wireframed,
+    wireframed: false,
   },
   earth: {
     name: 'Earth',
@@ -178,7 +84,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.003, // 365.25 Earth days
     inclination: 23.4, // degrees
     orbitInclination: 0, // degrees (reference)
-    wireframed,
+    wireframed: false,
   },
   moon: {
     name: 'Moon',
@@ -194,7 +100,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.27, // 27.3 Earth days (tidally locked)
     inclination: 6.7, // degrees
     orbitInclination: 5.1, // degrees
-    wireframed,
+    wireframed: false,
   },
   mars: {
     name: 'Mars',
@@ -210,7 +116,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.001, // 687 Earth days
     inclination: 25.2, // degrees
     orbitInclination: 1.9, // degrees
-    wireframed,
+    wireframed: false,
   },
   jupiter: {
     name: 'Jupiter',
@@ -226,7 +132,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.0002, // 4333 Earth days
     inclination: 3.1, // degrees
     orbitInclination: 1.3, // degrees
-    wireframed,
+    wireframed: false,
   },
   saturn: {
     name: 'Saturn',
@@ -242,7 +148,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.00009, // 10759 Earth days
     inclination: 26.7, // degrees
     orbitInclination: 2.5, // degrees
-    wireframed,
+    wireframed: false,
   },
   uranus: {
     name: 'Uranus',
@@ -258,7 +164,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.00003, // 30687 Earth days
     inclination: 97.8, // degrees (retrograde)
     orbitInclination: 0.8, // degrees
-    wireframed,
+    wireframed: false,
   },
   neptune: {
     name: 'Neptune',
@@ -274,7 +180,7 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.00002, // 60190 Earth days
     inclination: 28.3, // degrees
     orbitInclination: 1.8, // degrees
-    wireframed,
+    wireframed: false,
   },
   pluto: {
     name: 'Pluto',
@@ -290,9 +196,6 @@ export const celestialBodiesConfig: Record<string, ICelestialBody> = {
     orbitalRotationSpeed: 0.00001, // 90560 Earth days
     inclination: 122.5, // degrees
     orbitInclination: 17.2, // degrees
-    wireframed,
+    wireframed: false,
   },
-}
-
-// After celestialBodiesConfig is defined, update the celestialBodies property
-solarSystemConfig.celestialBodies = Object.values(celestialBodiesConfig)
+} 

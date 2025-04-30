@@ -1,18 +1,23 @@
+import * as THREE from 'three'
+
 export const colorConfig = {
-  pureWhite: 0xFFFFFF,
-  pureBlack: 0x000000,
-  ambientGrey: 0x404040,
-  trailGrey: 0x666666,
-  sunYellow: 0xFFE11F,
-  sunraysOrange: 0xFF9900,
-  mercuryBrown: 0xAB6E30,
-  venusYellow: 0xF0D360,
-  earthBlue: 0x0256D4,
-  moonGrey: 0xB7B7B7,
-  marsRed: 0x970202,
-  jupiterOrange: 0xFB7923,
-  saturnYellow: 0xE6A205,
-  uranusCyan: 0x72EAF3,
-  neptuneBlue: 0x3232FB,
-  plutoGrey: 0x9D7F72,
+  // Base colors
+  pureBlack: new THREE.Color(0x000000),
+  pureWhite: new THREE.Color(0xFFFFFF),
+  ambientGrey: new THREE.Color(0x404040),
+  trailGrey: new THREE.Color(0x808080),
+
+  // Celestial body colors
+  sunYellow: new THREE.Color(0xFFFF00),
+  sunraysOrange: new THREE.Color(0xFFA500),
+  mercuryBrown: new THREE.Color(0x8B4513),
+  venusYellow: new THREE.Color(0xFFD700),
+  earthBlue: new THREE.Color(0x0000FF),
+  moonGrey: new THREE.Color(0xC0C0C0),
+  marsRed: new THREE.Color(0xFF0000),
+  jupiterOrange: new THREE.Color(0xFFA500),
+  saturnYellow: new THREE.Color(0xFFD700),
+  uranusCyan: new THREE.Color(0x00FFFF),
+  neptuneBlue: new THREE.Color(0x0000CD),
+  plutoGrey: new THREE.Color(0xA9A9A9),
 }

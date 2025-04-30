@@ -9,6 +9,15 @@ import { AnimationService } from './AnimationService'
 import { GUIService } from './GUIService'
 import { CelestialBodyService } from './CelestialBodyService'
 
+/**
+ * SolarSystemService is the main orchestrator of the solar system visualization.
+ * It coordinates all other services and manages the overall application lifecycle.
+ * 
+ * Responsibilities:
+ * 1. Initializes and coordinates all other services
+ * 2. Manages the creation and setup of the solar system
+ * 3. Provides high-level control over the visualization
+ */
 export class SolarSystemService {
   private sceneService: SceneService
   private animationService: AnimationService
@@ -16,30 +25,39 @@ export class SolarSystemService {
   private celestialBodyService: CelestialBodyService
 
   constructor(container: HTMLElement) {
-    // Initialize services
+    // Initialize services in dependency order
     this.sceneService = new SceneService(container, sceneConfig)
     const state = this.sceneService.getState()
     this.animationService = new AnimationService(state)
     this.guiService = new GUIService(state)
     this.celestialBodyService = new CelestialBodyService(state)
 
-    // Setup scene
+    // Setup scene with stars and lighting
     const stars = this.sceneService.createStars()
     this.sceneService.getScene().add(stars)
     this.sceneService.createLights()
 
-    // Create solar system
+    // Create the solar system with all celestial bodies
     this.celestialBodyService.createSolarSystem()
 
-    // Setup GUI
+    // Initialize the GUI controls
     this.guiService.initializeGUI()
   }
 
+  /**
+   * Starts the animation loop for the solar system
+   */
   public startAnimation(): void {
     this.animationService.startAnimation()
   }
 
-  // * Adds axis and grid to a node -- not intended to be used in production
+  /**
+   * Adds axis and grid helpers to a node for debugging purposes
+   * @param node - The 3D object to add helpers to
+   * @param units - Size of the grid
+   * @param label - Label for the GUI control
+   * @param folder - Optional GUI folder to add the control to
+   */
   public addAxisGrid(node: THREE.Object3D, units: number, label: string, folder?: GUI): void {
     const helper = new AxisGridsHelper(node, units)
     if (folder) {

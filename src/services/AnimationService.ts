@@ -2,6 +2,16 @@ import type { ISolarSystemState } from '@/types/solar-system.types'
 import { celestialBodiesConfig } from '@/configs/celestial-bodies.config'
 import * as THREE from 'three'
 
+/**
+ * AnimationService manages the animation loop and all animated elements in the scene.
+ * It handles planet rotations, orbital movements, and performance monitoring.
+ * 
+ * Responsibilities:
+ * 1. Animation loop management
+ * 2. FPS monitoring and display
+ * 3. Planet rotation animations
+ * 4. Orbital movement animations
+ */
 export class AnimationService {
   private state: ISolarSystemState
   private lastTime: number
@@ -13,20 +23,34 @@ export class AnimationService {
     this.state = state
     this.lastTime = performance.now()
     this.frameCount = 0
-    this.fpsUpdateInterval = 500
+    this.fpsUpdateInterval = 500 // Update FPS counter every 500ms
     this.fpsUpdateTime = this.lastTime
   }
 
+  /**
+   * Starts the animation loop
+   */
   public startAnimation(): void {
     this.lastTime = performance.now()
     this.fpsUpdateTime = this.lastTime
     this.animate()
   }
 
+  /**
+   * Returns the FPS counter object for GUI display
+   */
   public getFpsCounter(): { value: number } {
     return this.state.fpsCounter
   }
 
+  /**
+   * Main animation loop
+   * Handles:
+   * - FPS calculation
+   * - Planet rotations
+   * - Orbital movements
+   * - Scene updates
+   */
   private animate(): void {
     const currentTime = performance.now()
     const deltaTime = (currentTime - this.lastTime) / 1000
@@ -39,6 +63,9 @@ export class AnimationService {
     this.state.animationFrameId = requestAnimationFrame(() => this.animate())
   }
 
+  /**
+   * Updates the FPS counter
+   */
   private updateFPSCounter(currentTime: number): void {
     this.frameCount++
     if (currentTime - this.fpsUpdateTime >= this.fpsUpdateInterval) {
@@ -48,6 +75,10 @@ export class AnimationService {
     }
   }
 
+  /**
+   * Animates all celestial bodies
+   * Handles both self-rotation and orbital movement
+   */
   private animateObjects(deltaTime: number): void {
     // Animate sun
     const sun = this.state.objects.find(object => object.name === 'Sun') as THREE.Object3D

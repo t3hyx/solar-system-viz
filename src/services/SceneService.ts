@@ -3,6 +3,18 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
 
+/**
+ * SceneService manages the Three.js scene, camera, renderer, and basic scene setup.
+ * It's responsible for the foundational 3D environment and maintains the application state.
+ * 
+ * Responsibilities:
+ * 1. Scene initialization and management
+ * 2. Camera setup and configuration
+ * 3. Renderer setup and management
+ * 4. Scene controls (OrbitControls)
+ * 5. Basic lighting setup
+ * 6. State management for the entire application
+ */
 export class SceneService {
   private config: ISceneConfig
   private state: ISolarSystemState
@@ -12,42 +24,72 @@ export class SceneService {
     this.state = this.initializeState(container)
   }
 
+  /**
+   * Returns the current application state
+   */
   public getState(): ISolarSystemState {
     return this.state
   }
 
+  /**
+   * Returns the Three.js scene
+   */
   public getScene(): THREE.Scene {
     return this.state.scene
   }
 
+  /**
+   * Returns the camera instance
+   */
   public getCamera(): THREE.PerspectiveCamera {
     return this.state.camera
   }
 
+  /**
+   * Returns the WebGL renderer
+   */
   public getRenderer(): THREE.WebGLRenderer {
     return this.state.renderer
   }
 
+  /**
+   * Returns the orbit controls instance
+   */
   public getControls(): OrbitControls {
     return this.state.controls
   }
 
+  /**
+   * Returns the GUI instance
+   */
   public getGUI(): GUI {
     return this.state.gui
   }
 
+  /**
+   * Returns all objects in the scene
+   */
   public getObjects(): THREE.Object3D[] {
     return this.state.objects
   }
 
+  /**
+   * Adds an object to the scene and state
+   */
   public addObject(object: THREE.Object3D): void {
     this.state.objects.push(object)
   }
 
+  /**
+   * Finds an object by name in the scene
+   */
   public findObject(name: string): THREE.Object3D | undefined {
     return this.state.objects.find(obj => obj.name === name)
   }
 
+  /**
+   * Initializes the application state with all necessary Three.js components
+   */
   private initializeState(container: HTMLElement): ISolarSystemState {
     const renderer = this.createRenderer(container)
     const camera = this.createCamera(container)
@@ -67,6 +109,9 @@ export class SceneService {
     }
   }
 
+  /**
+   * Creates and configures the WebGL renderer
+   */
   private createRenderer(container: HTMLElement): THREE.WebGLRenderer {
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     renderer.setSize(container.clientWidth, container.clientHeight)
@@ -74,6 +119,9 @@ export class SceneService {
     return renderer
   }
 
+  /**
+   * Creates and configures the perspective camera
+   */
   private createCamera(container: HTMLElement): THREE.PerspectiveCamera {
     const aspect = container.clientWidth / container.clientHeight
     const camera = new THREE.PerspectiveCamera(
@@ -87,12 +135,18 @@ export class SceneService {
     return camera
   }
 
+  /**
+   * Creates and configures the scene
+   */
   private createScene(): THREE.Scene {
     const scene = new THREE.Scene()
     scene.background = new THREE.Color(this.config.background.color)
     return scene
   }
 
+  /**
+   * Creates and configures the orbit controls
+   */
   private createControls(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer): OrbitControls {
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enableDamping = true
@@ -104,6 +158,9 @@ export class SceneService {
     return controls
   }
 
+  /**
+   * Creates a starfield background
+   */
   public createStars(): THREE.Points {
     const geometry = new THREE.BufferGeometry()
     const positions = new Float32Array(this.config.stars.count * 3)
@@ -144,6 +201,9 @@ export class SceneService {
     return stars
   }
 
+  /**
+   * Creates and adds lights to the scene
+   */
   public createLights(): void {
     const sunLight = new THREE.PointLight(
       this.config.lights.sun.color,

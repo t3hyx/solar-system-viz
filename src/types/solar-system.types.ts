@@ -56,6 +56,8 @@ export interface ICelestialBody {
   distance: number
   selfRotationSpeed: number
   orbitalRotationSpeed: number
+  inclination: number // degrees
+  orbitInclination: number // degrees
   color: number
   emissive: number
   emissiveIntensity: number

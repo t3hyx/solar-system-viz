@@ -1,51 +1,69 @@
-import type { ISolarSystemConfig, ISolarSystemState } from '@/types/solar-system.types'
+import type { GUI } from 'three/addons/libs/lil-gui.module.min.js'
+import { sceneConfig } from '@/configs/scene.config'
 import { celestialBodiesConfig } from '@/configs/solar-system.config'
 import { CelestialBodyFactory } from '@/factories/CelestialBodyFactory'
 import { AxisGridsHelper } from '@/utils/AxisGridsHelper'
 import * as THREE from 'three'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
+import { AnimationService } from './AnimationService'
+import { CelestialBodyService } from './CelestialBodyService'
+import { GUIService } from './GUIService'
+import { SceneService } from './SceneService'
 
+/**
+ * # SolarSystemService is the main orchestrator of the solar system visualization.
+ * # It coordinates all other services and manages the overall application lifecycle.
+ *
+ * ? Responsibilities:
+ * ? 1. Initializes and coordinates all other services
+ * ? 2. Manages the creation and setup of the solar system
+ * ? 3. Provides high-level control over the visualization
+ */
 export class SolarSystemService {
-  // ! ===== PROPERTIES =====
-  // * State & Config
-  private config: ISolarSystemConfig
-  private state: ISolarSystemState
-  // * Performance monitoring -- not intended to be used in production
-  private fpsCounter: { value: number }
-  private lastTime: number
-  private frameCount: number
-  private fpsUpdateInterval: number
-  private fpsUpdateTime: number
+  private sceneService: SceneService
+  private animationService: AnimationService
+  private guiService: GUIService
+  private celestialBodyService: CelestialBodyService
 
-  // ! ===== CONSTRUCTOR =====
-  constructor(container: HTMLElement, config: ISolarSystemConfig) {
-    // * Initialize configuration
-    this.config = config
+  constructor(container: HTMLElement) {
+    // initialize services in dependency order
+    this.sceneService = new SceneService(container, sceneConfig)
+    const state = this.sceneService.getState()
+    this.animationService = new AnimationService(state)
+    this.guiService = new GUIService(state)
+    this.celestialBodyService = new CelestialBodyService(state)
 
-    // * Initialize performance monitoring
-    this.fpsCounter = { value: 0 }
-    this.lastTime = performance.now()
-    this.frameCount = 0
-    this.fpsUpdateInterval = 500 // update fps every 500ms
-    this.fpsUpdateTime = this.lastTime
+    // setup scene with stars and lighting
+    const stars = this.sceneService.createStars()
+    this.sceneService.getScene().add(stars)
+    this.sceneService.createLights()
 
-    // * Initialize state
-    this.state = this.initializeState(container)
+    // create the solar system with all celestial bodies
+    this.celestialBodyService.createSolarSystem()
+
+    // initialize the GUI controls
+    this.guiService.initializeGUI()
   }
 
-  // ! ===== PUBLIC METHODS =====
-  // * Starts the animation
+  // * Starts the animation loop for the solar system
   public startAnimation(): void {
-    this.lastTime = performance.now()
-    this.fpsUpdateTime = this.lastTime
-    this.animate()
+    this.animationService.startAnimation()
   }
 
-  // * Adds axis and grid to a node -- not intended to be used in production
-  public addAxisGrid(node: THREE.Object3D, units: number, label: string): void {
+  /**
+   * Adds axis and grid helpers to a node for debugging purposes
+   * @param node - The 3D object to add helpers to
+   * @param units - Size of the grid
+   * @param label - Label for the GUI control
+   * @param folder - Optional GUI folder to add the control to
+   */
+  public addAxisGrid(node: THREE.Object3D, units: number, label: string, folder?: GUI): void {
     const helper = new AxisGridsHelper(node, units)
-    this.state.gui.add(helper, 'visible').name(label)
+    if (folder) {
+      folder.add(helper, 'visible').name(label)
+    }
+    else {
+      this.sceneService.getState().gui.add(helper, 'visible').name(label)
+    }
   }
 
   // * Handles window resize events if any
@@ -64,199 +82,294 @@ export class SolarSystemService {
 
   // # Solar System
   public createSolarSystem(): void {
-    // * Setup GUI -- not intended to be used in production
-    const fpsFolder = this.state.gui.addFolder('FPS')
-    fpsFolder.add(this.fpsCounter, 'value').name('FPS').listen()
-
     // * Solar system container
     const solarSystem = new THREE.Object3D()
-    this.state.scene.add(solarSystem)
-    this.state.objects.push(solarSystem)
+    this.sceneService.getScene().add(solarSystem)
+    this.sceneService.getState().objects.push(solarSystem)
 
     // * Add lights
-    this.createLights()
+    this.sceneService.createLights()
 
     // * Add Sun
     const sun = CelestialBodyFactory.createSun()
     solarSystem.add(sun)
-    this.state.objects.push(sun)
+    this.sceneService.getState().objects.push(sun)
 
-    // * Add Earth's orbit, and Earth planet on it
-    const earthOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.earth.distance)
+    // * Add Mercury's orbit, trail, and planet
+    const mercuryOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.mercury.distance, celestialBodiesConfig.mercury.name)
+    solarSystem.add(mercuryOrbit)
+    this.sceneService.getState().objects.push(mercuryOrbit)
+
+    const mercuryTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.mercury.distance, celestialBodiesConfig.mercury.name)
+    solarSystem.add(mercuryTrail)
+    this.sceneService.getState().objects.push(mercuryTrail)
+
+    const mercury = CelestialBodyFactory.createMercury()
+    mercury.position.x = celestialBodiesConfig.mercury.distance
+    mercuryOrbit.add(mercury)
+    this.sceneService.getState().objects.push(mercury)
+
+    // * Add Venus's orbit, trail, and planet
+    const venusOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.venus.distance, celestialBodiesConfig.venus.name)
+    solarSystem.add(venusOrbit)
+    this.sceneService.getState().objects.push(venusOrbit)
+
+    const venusTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.venus.distance, celestialBodiesConfig.venus.name)
+    solarSystem.add(venusTrail)
+    this.sceneService.getState().objects.push(venusTrail)
+
+    const venus = CelestialBodyFactory.createVenus()
+    venus.position.x = celestialBodiesConfig.venus.distance
+    venusOrbit.add(venus)
+    this.sceneService.getState().objects.push(venus)
+
+    // * Add Earth's orbit, trail, and planet
+    const earthOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.earth.distance, celestialBodiesConfig.earth.name)
     solarSystem.add(earthOrbit)
-    this.state.objects.push(earthOrbit)
+    this.sceneService.getState().objects.push(earthOrbit)
+
+    const earthTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.earth.distance, celestialBodiesConfig.earth.name)
+    solarSystem.add(earthTrail)
+    this.sceneService.getState().objects.push(earthTrail)
 
     const earth = CelestialBodyFactory.createEarth()
+    earth.position.x = celestialBodiesConfig.earth.distance
     earthOrbit.add(earth)
-    this.state.objects.push(earth)
+    this.sceneService.getState().objects.push(earth)
 
-    // * Add Moon's orbit, and Moon planet on it
-    const moonOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.moon.distance)
-    earthOrbit.add(moonOrbit) // edge-case: Moon's orbit is attached to Earth's orbit
+    // * Add Moon's orbit, trail, and planet
+    const moonOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.moon.distance, celestialBodiesConfig.moon.name)
+    earth.add(moonOrbit)
+
+    const moonTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.moon.distance, celestialBodiesConfig.moon.name)
+    earth.add(moonTrail)
+    this.sceneService.getState().objects.push(moonTrail)
 
     const moon = CelestialBodyFactory.createMoon()
+    moon.position.x = celestialBodiesConfig.moon.distance
     moonOrbit.add(moon)
-    this.state.objects.push(moon)
+    this.sceneService.getState().objects.push(moon)
 
-    // * Add Saturn's orbit, and Saturn with its rings, on it
-    const saturnOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.saturn.distance)
+    // * Add Mars's orbit, trail, and planet
+    const marsOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.mars.distance, celestialBodiesConfig.mars.name)
+    solarSystem.add(marsOrbit)
+    this.sceneService.getState().objects.push(marsOrbit)
+
+    const marsTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.mars.distance, celestialBodiesConfig.mars.name)
+    solarSystem.add(marsTrail)
+    this.sceneService.getState().objects.push(marsTrail)
+
+    const mars = CelestialBodyFactory.createMars()
+    mars.position.x = celestialBodiesConfig.mars.distance
+    marsOrbit.add(mars)
+    this.sceneService.getState().objects.push(mars)
+
+    // * Add Jupiter's orbit, trail, and planet
+    const jupiterOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.jupiter.distance, celestialBodiesConfig.jupiter.name)
+    solarSystem.add(jupiterOrbit)
+    this.sceneService.getState().objects.push(jupiterOrbit)
+
+    const jupiterTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.jupiter.distance, celestialBodiesConfig.jupiter.name)
+    solarSystem.add(jupiterTrail)
+    this.sceneService.getState().objects.push(jupiterTrail)
+
+    const jupiter = CelestialBodyFactory.createJupiter()
+    jupiter.position.x = celestialBodiesConfig.jupiter.distance
+    jupiterOrbit.add(jupiter)
+    this.sceneService.getState().objects.push(jupiter)
+
+    // * Add Saturn's orbit, trail, and planet with its rings
+    const saturnOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.saturn.distance, celestialBodiesConfig.saturn.name)
     solarSystem.add(saturnOrbit)
-    this.state.objects.push(saturnOrbit)
+    this.sceneService.getState().objects.push(saturnOrbit)
 
-    const saturn = CelestialBodyFactory.createSaturnWithRings() // edge-case: Saturn is a group because of its rings
+    const saturnTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.saturn.distance, celestialBodiesConfig.saturn.name)
+    solarSystem.add(saturnTrail)
+    this.sceneService.getState().objects.push(saturnTrail)
+
+    const saturn = CelestialBodyFactory.createSaturnWithRings()
+    saturn.position.x = celestialBodiesConfig.saturn.distance
     saturnOrbit.add(saturn)
-    this.state.objects.push(saturn)
+    this.sceneService.getState().objects.push(saturn)
+
+    // * Add Uranus's orbit, trail, and planet
+    const uranusOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.uranus.distance, celestialBodiesConfig.uranus.name)
+    solarSystem.add(uranusOrbit)
+    this.sceneService.getState().objects.push(uranusOrbit)
+
+    const uranusTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.uranus.distance, celestialBodiesConfig.uranus.name)
+    solarSystem.add(uranusTrail)
+    this.sceneService.getState().objects.push(uranusTrail)
+
+    const uranus = CelestialBodyFactory.createUranus()
+    uranus.position.x = celestialBodiesConfig.uranus.distance
+    uranusOrbit.add(uranus)
+    this.sceneService.getState().objects.push(uranus)
+
+    // * Add Neptune's orbit, trail, and planet
+    const neptuneOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.neptune.distance, celestialBodiesConfig.neptune.name)
+    solarSystem.add(neptuneOrbit)
+    this.sceneService.getState().objects.push(neptuneOrbit)
+
+    const neptuneTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.neptune.distance, celestialBodiesConfig.neptune.name)
+    solarSystem.add(neptuneTrail)
+    this.sceneService.getState().objects.push(neptuneTrail)
+
+    const neptune = CelestialBodyFactory.createNeptune()
+    neptune.position.x = celestialBodiesConfig.neptune.distance
+    neptuneOrbit.add(neptune)
+    this.sceneService.getState().objects.push(neptune)
+
+    // * Add Pluto's orbit, trail, and planet
+    const plutoOrbit = CelestialBodyFactory.createOrbit(celestialBodiesConfig.pluto.distance, celestialBodiesConfig.pluto.name)
+    solarSystem.add(plutoOrbit)
+    this.sceneService.getState().objects.push(plutoOrbit)
+
+    const plutoTrail = CelestialBodyFactory.createOrbitTrail(celestialBodiesConfig.pluto.distance, celestialBodiesConfig.pluto.name)
+    solarSystem.add(plutoTrail)
+    this.sceneService.getState().objects.push(plutoTrail)
+
+    const pluto = CelestialBodyFactory.createPluto()
+    pluto.position.x = celestialBodiesConfig.pluto.distance
+    plutoOrbit.add(pluto)
+    this.sceneService.getState().objects.push(pluto)
+
+    // * Add orbit visualization controls to GUI
+    const orbitFolder = this.sceneService.getState().gui.addFolder('Orbit Visualizations')
+    const orbitControls = {
+      mercuryOrbit: false,
+      venusOrbit: false,
+      earthOrbit: false,
+      moonOrbit: false,
+      marsOrbit: false,
+      jupiterOrbit: false,
+      saturnOrbit: false,
+      uranusOrbit: false,
+      neptuneOrbit: false,
+      plutoOrbit: false,
+    }
+
+    orbitFolder.add(orbitControls, 'mercuryOrbit')
+      .name('Mercury Orbit')
+      .onChange((value: boolean) => {
+        const mercuryOrbit = this.sceneService.getState().objects.find(obj => obj.name === 'orbit-Mercury')
+        if (mercuryOrbit?.userData.orbitMesh) {
+          mercuryOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'venusOrbit')
+      .name('Venus Orbit')
+      .onChange((value: boolean) => {
+        const venusOrbit = this.sceneService.getState().objects.find(obj => obj.name === 'orbit-Venus')
+        if (venusOrbit?.userData.orbitMesh) {
+          venusOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'earthOrbit')
+      .name('Earth Orbit')
+      .onChange((value: boolean) => {
+        const earthOrbit = this.sceneService.getState().objects.find(obj => obj.name === 'orbit-Earth')
+        if (earthOrbit?.userData.orbitMesh) {
+          earthOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'moonOrbit')
+      .name('Moon Orbit')
+      .onChange((value: boolean) => {
+        const earth = this.sceneService.getState().objects.find(obj => obj.name === 'Earth')
+        if (earth) {
+          const moonOrbit = earth.children.find(child => child.name === 'orbit-Moon')
+          if (moonOrbit?.userData.orbitMesh) {
+            moonOrbit.userData.orbitMesh.visible = value
+          }
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'marsOrbit')
+      .name('Mars Orbit')
+      .onChange((value: boolean) => {
+        const marsOrbit = this.sceneService.getState().objects.find(obj => obj.name === 'orbit-Mars')
+        if (marsOrbit?.userData.orbitMesh) {
+          marsOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'jupiterOrbit')
+      .name('Jupiter Orbit')
+      .onChange((value: boolean) => {
+        const jupiterOrbit = this.sceneService.getState().objects.find(obj => obj.name === 'orbit-Jupiter')
+        if (jupiterOrbit?.userData.orbitMesh) {
+          jupiterOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'saturnOrbit')
+      .name('Saturn Orbit')
+      .onChange((value: boolean) => {
+        const saturnOrbit = this.sceneService.getState().objects.find(obj => obj.name === 'orbit-Saturn')
+        if (saturnOrbit?.userData.orbitMesh) {
+          saturnOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'uranusOrbit')
+      .name('Uranus Orbit')
+      .onChange((value: boolean) => {
+        const uranusOrbit = this.sceneService.getState().objects.find(obj => obj.name === 'orbit-Uranus')
+        if (uranusOrbit?.userData.orbitMesh) {
+          uranusOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'neptuneOrbit')
+      .name('Neptune Orbit')
+      .onChange((value: boolean) => {
+        const neptuneOrbit = this.sceneService.getState().objects.find(obj => obj.name === 'orbit-Neptune')
+        if (neptuneOrbit?.userData.orbitMesh) {
+          neptuneOrbit.userData.orbitMesh.visible = value
+        }
+      })
+
+    orbitFolder.add(orbitControls, 'plutoOrbit')
+      .name('Pluto Orbit')
+      .onChange((value: boolean) => {
+        const plutoOrbit = this.sceneService.getState().objects.find(obj => obj.name === 'orbit-Pluto')
+        if (plutoOrbit?.userData.orbitMesh) {
+          plutoOrbit.userData.orbitMesh.visible = value
+        }
+      })
 
     // * Add axis and grid to all objects -- not intended to be used in production
-    this.addAxisGrid(solarSystem, 100, '-- Solar System --')
-    this.addAxisGrid(sun, 3, 'Sun')
-    this.addAxisGrid(earth, 3, 'Earth')
-    this.addAxisGrid(moon, 1, 'Moon')
-    this.addAxisGrid(saturn, 10, 'Saturn')
-    this.addAxisGrid(earthOrbit, 5, 'orbit-Earth')
-    this.addAxisGrid(moonOrbit, 3, 'orbit-Moon')
-    this.addAxisGrid(saturnOrbit, 15, 'orbit-Saturn')
-  }
+    const axesGridsFolder = this.sceneService.getState().gui.addFolder('Axes & Grids')
 
-  // ! ===== PRIVATE METHODS =====
-  // # Main
-  // * Initializes the state of the solar system
-  private initializeState(container: HTMLElement): ISolarSystemState {
-    // Create core components
-    const renderer = this.createRenderer(container)
-    const camera = this.createCamera(container)
-    const scene = this.createScene()
-    const controls = this.createControls(camera, renderer)
-    const gui = new GUI()
+    // Planets section
+    const planetsFolder = axesGridsFolder.addFolder('Planets')
+    this.addAxisGrid(sun, 3, 'Sun', planetsFolder)
+    this.addAxisGrid(mercury, 3, 'Mercury', planetsFolder)
+    this.addAxisGrid(venus, 3, 'Venus', planetsFolder)
+    this.addAxisGrid(earth, 3, 'Earth', planetsFolder)
+    this.addAxisGrid(moon, 1, 'Moon', planetsFolder)
+    this.addAxisGrid(mars, 3, 'Mars', planetsFolder)
+    this.addAxisGrid(jupiter, 3, 'Jupiter', planetsFolder)
+    this.addAxisGrid(saturn, 3, 'Saturn', planetsFolder)
+    this.addAxisGrid(uranus, 3, 'Uranus', planetsFolder)
+    this.addAxisGrid(neptune, 3, 'Neptune', planetsFolder)
+    this.addAxisGrid(pluto, 3, 'Pluto', planetsFolder)
 
-    return {
-      renderer,
-      camera,
-      scene,
-      controls,
-      gui,
-      objects: [],
-      animationFrameId: 0,
-    }
-  }
-
-  // * Animation loop
-  private animate(): void {
-    // step1: calculate time since last frame
-    const currentTime = performance.now()
-    this.lastTime = currentTime
-    // step2: update fps counter -- not intended to be used in production
-    this.updateFPSCounter(currentTime)
-    // step3: update controls
-    this.state.controls.update()
-    // step4: render
-    this.state.renderer.render(this.state.scene, this.state.camera)
-    // step5: request next frame
-    this.state.animationFrameId = requestAnimationFrame(() => this.animate())
-  }
-
-  // # Helpers
-  // * Creates & configures the renderer
-  private createRenderer(container: HTMLElement): THREE.WebGLRenderer {
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setSize(container.clientWidth, container.clientHeight)
-
-    // Add to DOM
-    container.appendChild(renderer.domElement)
-
-    return renderer
-  }
-
-  // * Creates the camera
-  private createCamera(container: HTMLElement): THREE.PerspectiveCamera {
-    // Calculate aspect ratio
-    const aspect = container.clientWidth / container.clientHeight
-
-    const camera = new THREE.PerspectiveCamera(
-      this.config.camera.fov,
-      aspect,
-      this.config.camera.near,
-      this.config.camera.far,
-    )
-    camera.position.copy(this.config.camera.position)
-    camera.lookAt(0, 0, 0)
-
-    return camera
-  }
-
-  // * Creates random-positioned stars for the scene background
-  private createStars() {
-    const starsGeometry = new THREE.BufferGeometry()
-    const starsMaterial = new THREE.PointsMaterial({
-      color: this.config.stars.color,
-      size: this.config.stars.size,
-      sizeAttenuation: this.config.stars.sizeAttenuation,
-    })
-
-    const starsVertices = []
-    for (let i = 0; i < this.config.stars.count; i++) {
-      const x = (Math.random() - 0.5) * 2000
-      const y = (Math.random() - 0.5) * 2000
-      const z = (Math.random() - 0.5) * 2000
-      starsVertices.push(x, y, z)
-    }
-
-    starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3))
-    const stars = new THREE.Points(starsGeometry, starsMaterial)
-
-    return stars
-  }
-
-  // * Creates the scene
-  private createScene(): THREE.Scene {
-    const scene = new THREE.Scene()
-    scene.background = new THREE.Color(this.config.background.color)
-
-    // Add the stars
-    scene.add(this.createStars())
-
-    return scene
-  }
-
-  // * Creates & configures orbit controls
-  private createControls(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer): OrbitControls {
-    const controls = new OrbitControls(camera, renderer.domElement)
-    controls.enableDamping = true
-    controls.dampingFactor = 0.05
-
-    return controls
-  }
-
-  // * Creates lights configuration
-  private createLights() {
-    // Sun Light
-    const sunLight = new THREE.PointLight(
-      this.config.lights.sun.color,
-      this.config.lights.sun.intensity,
-      this.config.lights.sun.distance,
-      this.config.lights.sun.decay,
-    )
-    sunLight.position.set(0, 0, 0)
-    this.state.scene.add(sunLight)
-
-    // Ambient Light
-    const ambientLight = new THREE.AmbientLight(
-      this.config.lights.ambient.color,
-      this.config.lights.ambient.intensity,
-    )
-    this.state.scene.add(ambientLight)
-  }
-
-  // * Updates the FPS counter -- not intended to be used in production
-  private updateFPSCounter(currentTime: number): void {
-    // increment frame count
-    this.frameCount++
-
-    // update fps every 500ms
-    if (currentTime - this.fpsUpdateTime >= this.fpsUpdateInterval) {
-      this.fpsCounter.value = Math.round((this.frameCount / (currentTime - this.fpsUpdateTime)) * 500)
-      this.frameCount = 0
-      this.fpsUpdateTime = currentTime
-    }
+    // Orbits section
+    const orbitsFolder = axesGridsFolder.addFolder('Orbits')
+    this.addAxisGrid(mercuryOrbit, 5, 'Mercury', orbitsFolder)
+    this.addAxisGrid(venusOrbit, 5, 'Venus', orbitsFolder)
+    this.addAxisGrid(earthOrbit, 5, 'Earth', orbitsFolder)
+    this.addAxisGrid(moonOrbit, 3, 'Moon', orbitsFolder)
+    this.addAxisGrid(marsOrbit, 5, 'Mars', orbitsFolder)
+    this.addAxisGrid(jupiterOrbit, 5, 'Jupiter', orbitsFolder)
+    this.addAxisGrid(saturnOrbit, 15, 'Saturn', orbitsFolder)
+    this.addAxisGrid(uranusOrbit, 15, 'Uranus', orbitsFolder)
+    this.addAxisGrid(neptuneOrbit, 15, 'Neptune', orbitsFolder)
+    this.addAxisGrid(plutoOrbit, 15, 'Pluto', orbitsFolder)
   }
 }

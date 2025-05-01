@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import type { ISolarSystemConfig } from './types/solar-system.types'
 import { onMounted } from 'vue'
-import { solarSystemConfig } from './configs/solar-system.config'
 import { SolarSystemService } from './services/SolarSystemService'
 
 let solarSystemService: SolarSystemService
-const config: ISolarSystemConfig = solarSystemConfig
 
 function init() {
   const container = document.getElementById('solar-system')
@@ -13,10 +10,7 @@ function init() {
     return
 
   // Create solar system service
-  solarSystemService = new SolarSystemService(container, config)
-
-  // Create solar system
-  solarSystemService.createSolarSystem()
+  solarSystemService = new SolarSystemService(container)
 
   // Start animation
   solarSystemService.startAnimation()

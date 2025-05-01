@@ -1,8 +1,8 @@
-import * as THREE from 'three'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
+import type * as THREE from 'three'
+import type { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import type { GUI } from 'three/addons/libs/lil-gui.module.min.js'
 
-// Scene Configuration Types
+// # Scene Configuration Types
 export interface ICameraConfig {
   fov: number
   near: number
@@ -49,7 +49,7 @@ export interface ISceneConfig {
   controls: IControlsConfig
 }
 
-// GUI Configuration Types
+// # GUI Configuration Types
 export interface ITrailConfig {
   color: THREE.Color
   opacity: number
@@ -73,7 +73,7 @@ export interface IGuiConfig {
   axisGrid: IAxisGridConfig
 }
 
-// Celestial Body Types
+// # Celestial Body Types
 export interface ICelestialBody {
   name: string
   radius: number
@@ -89,10 +89,10 @@ export interface ICelestialBody {
   inclination: number
   orbitInclination: number
   wireframed: boolean
-  severity?: number // Optional property for error handling
+  severity?: number // optional property for error handling
 }
 
-// State Types
+// # State Types
 export interface ISolarSystemState {
   renderer: THREE.WebGLRenderer
   camera: THREE.PerspectiveCamera
@@ -104,7 +104,7 @@ export interface ISolarSystemState {
   fpsCounter: { value: number }
 }
 
-// Solar System Configuration Type
+// # Solar System Configuration Type
 export interface ISolarSystemConfig {
   camera: ICameraConfig
   scene: ISceneConfig

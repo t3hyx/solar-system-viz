@@ -3,6 +3,15 @@ import { celestialBodiesConfig } from '@/configs/celestial-bodies.config'
 import { CelestialBodyFactory } from '@/factories/CelestialBodyFactory'
 import * as THREE from 'three'
 
+/**
+ * # CelestialBodyService is responsible for creating and managing all celestial bodies in the solar system.
+ *
+ * ? Responsibilities:
+ * ? 1. Creation of celestial bodies
+ * ? 2. Creation of orbits and trails
+ * ? 3. Adding celestial bodies to the scene
+ * ? 4. Handling the creation of moons
+ */
 export class CelestialBodyService {
   private state: ISolarSystemState
 
@@ -11,17 +20,17 @@ export class CelestialBodyService {
   }
 
   public createSolarSystem(): void {
-    // Create solar system container
+    // create solar system container
     const solarSystem = new THREE.Object3D()
     this.state.scene.add(solarSystem)
     this.state.objects.push(solarSystem)
 
-    // Create Sun
+    // create Sun
     const sun = CelestialBodyFactory.createSun()
     solarSystem.add(sun)
     this.state.objects.push(sun)
 
-    // Create planets
+    // create planets
     this.createPlanet('mercury', solarSystem)
     this.createPlanet('venus', solarSystem)
     this.createPlanet('earth', solarSystem)
@@ -32,24 +41,24 @@ export class CelestialBodyService {
     this.createPlanet('neptune', solarSystem)
     this.createPlanet('pluto', solarSystem)
 
-    // Create Moon (special case as it orbits Earth)
+    // create Moon (special case as it orbits Earth)
     this.createMoon()
   }
 
   private createPlanet(planetKey: keyof typeof celestialBodiesConfig, parent: THREE.Object3D): void {
     const config = celestialBodiesConfig[planetKey]
-    
-    // Create orbit
+
+    // create orbit
     const orbit = CelestialBodyFactory.createOrbit(config.distance, config.name)
     parent.add(orbit)
     this.state.objects.push(orbit)
 
-    // Create trail
+    // create trail
     const trail = CelestialBodyFactory.createOrbitTrail(config.distance, config.name)
     parent.add(trail)
     this.state.objects.push(trail)
 
-    // Create planet
+    // create planet
     let planet: THREE.Object3D
     switch (planetKey) {
       case 'mercury':
@@ -90,23 +99,24 @@ export class CelestialBodyService {
 
   private createMoon(): void {
     const earth = this.state.objects.find(obj => obj.name === 'Earth')
-    if (!earth) return
+    if (!earth)
+      return
 
     const config = celestialBodiesConfig.moon
 
-    // Create orbit
+    // create orbit
     const orbit = CelestialBodyFactory.createOrbit(config.distance, config.name)
     earth.add(orbit)
 
-    // Create trail
+    // create trail
     const trail = CelestialBodyFactory.createOrbitTrail(config.distance, config.name)
     earth.add(trail)
     this.state.objects.push(trail)
 
-    // Create moon
+    // create moon
     const moon = CelestialBodyFactory.createMoon()
     moon.position.x = config.distance
     orbit.add(moon)
     this.state.objects.push(moon)
   }
-} 
+}

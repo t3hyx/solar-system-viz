@@ -1,13 +1,13 @@
 import * as THREE from 'three'
 
 export const colorConfig = {
-  // Base colors
+  // * Base colors
   pureBlack: new THREE.Color(0x000000),
   pureWhite: new THREE.Color(0xFFFFFF),
   ambientGrey: new THREE.Color(0x404040),
   trailGrey: new THREE.Color(0x808080),
 
-  // Celestial body colors
+  // * Celestial body colors
   sunYellow: new THREE.Color(0xFFFF00),
   sunraysOrange: new THREE.Color(0xFFA500),
   mercuryBrown: new THREE.Color(0x8B4513),

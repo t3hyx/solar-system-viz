@@ -1,22 +1,22 @@
+import type { GUI } from 'three/addons/libs/lil-gui.module.min.js'
+import { sceneConfig } from '@/configs/scene.config'
 import { celestialBodiesConfig } from '@/configs/solar-system.config'
 import { CelestialBodyFactory } from '@/factories/CelestialBodyFactory'
 import { AxisGridsHelper } from '@/utils/AxisGridsHelper'
 import * as THREE from 'three'
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
-import { sceneConfig } from '@/configs/scene.config'
-import { SceneService } from './SceneService'
 import { AnimationService } from './AnimationService'
-import { GUIService } from './GUIService'
 import { CelestialBodyService } from './CelestialBodyService'
+import { GUIService } from './GUIService'
+import { SceneService } from './SceneService'
 
 /**
- * SolarSystemService is the main orchestrator of the solar system visualization.
- * It coordinates all other services and manages the overall application lifecycle.
- * 
- * Responsibilities:
- * 1. Initializes and coordinates all other services
- * 2. Manages the creation and setup of the solar system
- * 3. Provides high-level control over the visualization
+ * # SolarSystemService is the main orchestrator of the solar system visualization.
+ * # It coordinates all other services and manages the overall application lifecycle.
+ *
+ * ? Responsibilities:
+ * ? 1. Initializes and coordinates all other services
+ * ? 2. Manages the creation and setup of the solar system
+ * ? 3. Provides high-level control over the visualization
  */
 export class SolarSystemService {
   private sceneService: SceneService
@@ -25,28 +25,26 @@ export class SolarSystemService {
   private celestialBodyService: CelestialBodyService
 
   constructor(container: HTMLElement) {
-    // Initialize services in dependency order
+    // initialize services in dependency order
     this.sceneService = new SceneService(container, sceneConfig)
     const state = this.sceneService.getState()
     this.animationService = new AnimationService(state)
     this.guiService = new GUIService(state)
     this.celestialBodyService = new CelestialBodyService(state)
 
-    // Setup scene with stars and lighting
+    // setup scene with stars and lighting
     const stars = this.sceneService.createStars()
     this.sceneService.getScene().add(stars)
     this.sceneService.createLights()
 
-    // Create the solar system with all celestial bodies
+    // create the solar system with all celestial bodies
     this.celestialBodyService.createSolarSystem()
 
-    // Initialize the GUI controls
+    // initialize the GUI controls
     this.guiService.initializeGUI()
   }
 
-  /**
-   * Starts the animation loop for the solar system
-   */
+  // * Starts the animation loop for the solar system
   public startAnimation(): void {
     this.animationService.startAnimation()
   }

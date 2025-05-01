@@ -1,7 +1,15 @@
 import type { ICelestialBody } from '@/types/solar-system.types'
-import { celestialBodiesConfig, solarSystemConfig } from '@/configs/solar-system.config'
+import { celestialBodiesConfig } from '@/configs/celestial-bodies.config'
+import { solarSystemConfig } from '@/configs/solar-system.config'
 import * as THREE from 'three'
 
+/**
+ * # CelestialBodyFactory is responsible for creating celestial bodies (planets, moons, sun) and their orbits and trails.
+ *
+ * ? Responsibilities:
+ * ? 1. Creation of celestial bodies
+ * ? 2. Creation of orbits and trails
+ */
 export class CelestialBodyFactory {
   private static config: Record<string, ICelestialBody> = celestialBodiesConfig
   private static systemConfig = solarSystemConfig
@@ -19,7 +27,7 @@ export class CelestialBodyFactory {
     mesh.scale.set(body.scale, body.scale, body.scale)
     mesh.name = body.name
 
-    // Apply inclination (tilt of the planet's axis)
+    // apply inclination
     mesh.rotation.z = THREE.MathUtils.degToRad(body.inclination)
 
     return mesh
@@ -30,7 +38,7 @@ export class CelestialBodyFactory {
     const orbit = new THREE.Object3D()
     orbit.name = `orbit-${bodyName}`
 
-    // Create a visual of the orbit
+    // create a visual of the orbit
     const orbitGeometry = new THREE.RingGeometry(
       distance - 0.1, // inner
       distance + 0.1, // outer
@@ -45,7 +53,7 @@ export class CelestialBodyFactory {
     const orbitMesh = new THREE.Mesh(orbitGeometry, orbitMaterial)
     orbit.add(orbitMesh)
 
-    // Apply orbit inclination
+    // apply orbit inclination
     const body = this.config[bodyName.toLowerCase()]
     if (body) {
       orbit.rotation.x = THREE.MathUtils.degToRad(body.orbitInclination)
@@ -80,7 +88,7 @@ export class CelestialBodyFactory {
     const orbitTrail = new THREE.Line(geometry, material)
     orbitTrail.name = `trail-${bodyName}`
 
-    // Apply orbit inclination
+    // apply orbit inclination
     const body = this.config[bodyName.toLowerCase()]
     if (body) {
       orbitTrail.rotation.x = THREE.MathUtils.degToRad(body.orbitInclination)

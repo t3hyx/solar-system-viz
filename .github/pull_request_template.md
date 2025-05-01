@@ -14,8 +14,12 @@
 
 ## 🔄 Related Issues
 <!-- Link to any related issues -->
-Closes #[issue-number]
-Related to #[issue-number]
+*Closes*:
+- #
+- #
+
+**Related to**:
+- #
 
 ## 📚 Documentation
 <!-- Any documentation updates included -->

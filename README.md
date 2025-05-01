@@ -184,3 +184,91 @@
 - Three.js
 - Vite
 - lil-gui (for controls)
+
+
+---
+
+
+# Solar System Visualization Application
+
+## Frontend Architecture
+- **Vue.js Application**
+  - **App.vue** (Root Component)
+    - **SolarSystem.vue** (Main Component)
+      - **SolarSystemService** (Core Service)
+        - Manages application state
+        - Coordinates between services
+        - Handles initialization and cleanup
+
+## Service Layer
+- **SceneService**
+  - Manages Three.js scene setup
+  - Handles camera, renderer, and controls
+  - Creates and manages GUI instance
+
+- **AnimationService**
+  - Controls animation loop
+  - Manages FPS counter
+  - Handles planet rotation and orbital animations
+
+- **GUIService**
+  - Manages dat.GUI interface
+  - Organizes controls into folders
+  - Handles user interactions with visualization
+
+- **CelestialBodyService**
+  - Coordinates with CelestialBodyFactory
+  - Manages celestial body creation and updates
+
+## Factory Layer
+- **CelestialBodyFactory**
+  - Creates planets, orbits, and trails
+  - Applies materials and textures
+  - Sets up orbital parameters
+
+## Data Flow
+1. **User Interaction**
+   - GUI controls → GUIService
+   - Camera controls → SceneService
+
+2. **Animation Loop**
+   - AnimationService → SceneService → Renderer
+   - Updates celestial body positions and rotations
+
+3. **State Management**
+   - SolarSystemService maintains application state
+   - Services communicate through state updates
+
+## External Dependencies
+- **Three.js**
+  - Scene, Camera, Renderer
+  - Geometries, Materials, Lights
+  - OrbitControls
+
+- **lil-gui**
+  - GUI controls and folders
+  - Performance monitoring
+
+- **Vite**
+  - Development server
+  - Build process
+  - Hot module replacement
+
+## File Structure
+```
+src/
+├── components/
+│ └── SolarSystem.vue
+├── services/
+│ ├── SolarSystemService.ts
+│ ├── SceneService.ts
+│ ├── AnimationService.ts
+│ ├── GUIService.ts
+│ └── CelestialBodyService.ts
+├── factories/
+│ └── CelestialBodyFactory.ts
+├── configs/
+│ └── solar-system.config.ts
+├── types/
+│ └── solar-system.types.ts
+└── App.vue

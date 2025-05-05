@@ -3,6 +3,8 @@ import { colorConfig } from '@/configs/color.config'
 import * as THREE from 'three'
 import { celestialBodiesConfig } from './celestial-bodies.config'
 
+export { celestialBodiesConfig }
+
 export const solarSystemConfig: ISolarSystemConfig = {
   camera: {
     fov: 75,

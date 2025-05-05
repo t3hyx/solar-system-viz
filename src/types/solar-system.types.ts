@@ -86,8 +86,6 @@ export interface ICelestialBody {
   scale: number
   segments: number
   shininess: number
-  selfRotationSpeed: number
-  orbitalRotationSpeed: number
   inclination: number
   orbitInclination: number
   wireframed: boolean
@@ -95,6 +93,7 @@ export interface ICelestialBody {
   rings?: {
     innerRadius: number
     outerRadius: number
+    segments: number
   }
 }
 

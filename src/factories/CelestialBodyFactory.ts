@@ -1,6 +1,7 @@
 import type { ICelestialBody } from '@/types/solar-system.types'
 import { celestialBodiesConfig } from '@/configs/celestial-bodies.config'
 import { solarSystemConfig } from '@/configs/solar-system.config'
+import { TextureService } from '@/services/TextureService'
 import * as THREE from 'three'
 
 /**
@@ -13,6 +14,11 @@ import * as THREE from 'three'
 export class CelestialBodyFactory {
   private static config: Record<string, ICelestialBody> = celestialBodiesConfig
   private static systemConfig = solarSystemConfig
+  private textureService: TextureService
+
+  constructor() {
+    this.textureService = new TextureService()
+  }
 
   // * Creates a basic celestial body (planets, moons, sun)
   public static createCelestialBody(body: ICelestialBody): THREE.Mesh {
@@ -109,6 +115,8 @@ export class CelestialBodyFactory {
       scale: this.config.sun.scale,
       segments: this.config.sun.segments,
       shininess: this.config.sun.shininess,
+      rotationSpeed: this.config.sun.rotationSpeed,
+      orbitSpeed: this.config.sun.orbitSpeed,
       selfRotationSpeed: this.config.sun.selfRotationSpeed,
       orbitalRotationSpeed: this.config.sun.orbitalRotationSpeed,
       wireframed: this.config.sun.wireframed,
@@ -129,6 +137,8 @@ export class CelestialBodyFactory {
       scale: this.config.mercury.scale,
       segments: this.config.mercury.segments,
       shininess: this.config.mercury.shininess,
+      rotationSpeed: this.config.mercury.rotationSpeed,
+      orbitSpeed: this.config.mercury.orbitSpeed,
       selfRotationSpeed: this.config.mercury.selfRotationSpeed,
       orbitalRotationSpeed: this.config.mercury.orbitalRotationSpeed,
       wireframed: this.config.mercury.wireframed,
@@ -149,6 +159,8 @@ export class CelestialBodyFactory {
       scale: this.config.venus.scale,
       segments: this.config.venus.segments,
       shininess: this.config.venus.shininess,
+      rotationSpeed: this.config.venus.rotationSpeed,
+      orbitSpeed: this.config.venus.orbitSpeed,
       selfRotationSpeed: this.config.venus.selfRotationSpeed,
       orbitalRotationSpeed: this.config.venus.orbitalRotationSpeed,
       wireframed: this.config.venus.wireframed,
@@ -169,6 +181,8 @@ export class CelestialBodyFactory {
       scale: this.config.earth.scale,
       segments: this.config.earth.segments,
       shininess: this.config.earth.shininess,
+      rotationSpeed: this.config.earth.rotationSpeed,
+      orbitSpeed: this.config.earth.orbitSpeed,
       selfRotationSpeed: this.config.earth.selfRotationSpeed,
       orbitalRotationSpeed: this.config.earth.orbitalRotationSpeed,
       wireframed: this.config.earth.wireframed,
@@ -189,6 +203,8 @@ export class CelestialBodyFactory {
       scale: this.config.moon.scale,
       segments: this.config.moon.segments,
       shininess: this.config.moon.shininess,
+      rotationSpeed: this.config.moon.rotationSpeed,
+      orbitSpeed: this.config.moon.orbitSpeed,
       selfRotationSpeed: this.config.moon.selfRotationSpeed,
       orbitalRotationSpeed: this.config.moon.orbitalRotationSpeed,
       wireframed: this.config.moon.wireframed,
@@ -209,6 +225,8 @@ export class CelestialBodyFactory {
       scale: this.config.mars.scale,
       segments: this.config.mars.segments,
       shininess: this.config.mars.shininess,
+      rotationSpeed: this.config.mars.rotationSpeed,
+      orbitSpeed: this.config.mars.orbitSpeed,
       selfRotationSpeed: this.config.mars.selfRotationSpeed,
       orbitalRotationSpeed: this.config.mars.orbitalRotationSpeed,
       wireframed: this.config.mars.wireframed,
@@ -229,6 +247,8 @@ export class CelestialBodyFactory {
       scale: this.config.jupiter.scale,
       segments: this.config.jupiter.segments,
       shininess: this.config.jupiter.shininess,
+      rotationSpeed: this.config.jupiter.rotationSpeed,
+      orbitSpeed: this.config.jupiter.orbitSpeed,
       selfRotationSpeed: this.config.jupiter.selfRotationSpeed,
       orbitalRotationSpeed: this.config.jupiter.orbitalRotationSpeed,
       wireframed: this.config.jupiter.wireframed,
@@ -262,7 +282,7 @@ export class CelestialBodyFactory {
       this.config.saturn.scale,
       this.config.saturn.scale,
     )
-    // Apply inclination
+    // apply inclination
     saturn.rotation.z = THREE.MathUtils.degToRad(this.config.saturn.inclination)
     saturnGroup.add(saturn)
 
@@ -277,7 +297,7 @@ export class CelestialBodyFactory {
       wireframe: this.config.saturn.wireframed,
     })
     const rings = new THREE.Mesh(ringGeometry, ringMaterial)
-    rings.rotation.x = Math.PI / 2 // x Rotate to be horizontal
+    rings.rotation.x = Math.PI / 2 // x rotate to be horizontal
     saturnGroup.add(rings)
 
     return saturnGroup
@@ -295,6 +315,8 @@ export class CelestialBodyFactory {
       scale: this.config.uranus.scale,
       segments: this.config.uranus.segments,
       shininess: this.config.uranus.shininess,
+      rotationSpeed: this.config.uranus.rotationSpeed,
+      orbitSpeed: this.config.uranus.orbitSpeed,
       selfRotationSpeed: this.config.uranus.selfRotationSpeed,
       orbitalRotationSpeed: this.config.uranus.orbitalRotationSpeed,
       wireframed: this.config.uranus.wireframed,
@@ -315,6 +337,8 @@ export class CelestialBodyFactory {
       scale: this.config.neptune.scale,
       segments: this.config.neptune.segments,
       shininess: this.config.neptune.shininess,
+      rotationSpeed: this.config.neptune.rotationSpeed,
+      orbitSpeed: this.config.neptune.orbitSpeed,
       selfRotationSpeed: this.config.neptune.selfRotationSpeed,
       orbitalRotationSpeed: this.config.neptune.orbitalRotationSpeed,
       wireframed: this.config.neptune.wireframed,
@@ -335,11 +359,89 @@ export class CelestialBodyFactory {
       scale: this.config.pluto.scale,
       segments: this.config.pluto.segments,
       shininess: this.config.pluto.shininess,
+      rotationSpeed: this.config.pluto.rotationSpeed,
+      orbitSpeed: this.config.pluto.orbitSpeed,
       selfRotationSpeed: this.config.pluto.selfRotationSpeed,
       orbitalRotationSpeed: this.config.pluto.orbitalRotationSpeed,
       wireframed: this.config.pluto.wireframed,
       inclination: this.config.pluto.inclination,
       orbitInclination: this.config.pluto.orbitInclination,
     })
+  }
+
+  public async createPlanet(name: string): Promise<THREE.Mesh> {
+    const config = celestialBodiesConfig[name]
+    if (!config) {
+      throw new Error(`No configuration found for celestial body: ${name}`)
+    }
+
+    const geometry = new THREE.SphereGeometry(config.radius, 64, 64)
+    const material = await this.textureService.createPlanetMaterial(name)
+
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.name = name
+
+    // special handling for Saturn's rings
+    if (name === 'saturn' && config.rings) {
+      const ringsGeometry = new THREE.RingGeometry(
+        config.rings.innerRadius,
+        config.rings.outerRadius,
+        64,
+      )
+      const ringsMaterial = new THREE.MeshBasicMaterial({
+        side: THREE.DoubleSide,
+        transparent: true,
+      })
+      const rings = new THREE.Mesh(ringsGeometry, ringsMaterial)
+      rings.rotation.x = Math.PI / 2
+      mesh.add(rings)
+    }
+
+    return mesh
+  }
+
+  public createOrbit(radius: number, name: string): THREE.Line {
+    const geometry = new THREE.BufferGeometry()
+    const material = new THREE.LineBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.3 })
+    const points = []
+
+    for (let i = 0; i <= 64; i++) {
+      const theta = (i / 64) * Math.PI * 2
+      points.push(new THREE.Vector3(
+        radius * Math.cos(theta),
+        0,
+        radius * Math.sin(theta),
+      ))
+    }
+
+    geometry.setFromPoints(points)
+    const orbit = new THREE.Line(geometry, material)
+    orbit.name = `${name}-orbit`
+    return orbit
+  }
+
+  public createOrbitTrail(radius: number, name: string): THREE.Line {
+    const geometry = new THREE.BufferGeometry()
+    const material = new THREE.LineBasicMaterial({
+      color: 0xFFFFFF,
+      transparent: true,
+      opacity: 0.1,
+      linewidth: 2,
+    })
+    const points = []
+
+    for (let i = 0; i <= 64; i++) {
+      const theta = (i / 64) * Math.PI * 2
+      points.push(new THREE.Vector3(
+        radius * Math.cos(theta),
+        0,
+        radius * Math.sin(theta),
+      ))
+    }
+
+    geometry.setFromPoints(points)
+    const trail = new THREE.Line(geometry, material)
+    trail.name = `${name}-trail`
+    return trail
   }
 }

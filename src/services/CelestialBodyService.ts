@@ -1,6 +1,5 @@
-import type { CelestialBodyFactory } from '@/factories/CelestialBodyFactory'
-import type { ISolarSystemState } from '@/types/solar-system.types'
 import { celestialBodiesConfig } from '@/configs/celestial-bodies.config'
+import { CelestialBodyFactory } from '@/factories/CelestialBodyFactory'
 import * as THREE from 'three'
 
 /**
@@ -13,64 +12,48 @@ import * as THREE from 'three'
  * ? 4. Handling the creation of moons
  */
 export class CelestialBodyService {
-  private state: ISolarSystemState
-  private celestialBodyFactory: CelestialBodyFactory
+  private factory: CelestialBodyFactory
 
-  constructor(state: ISolarSystemState, celestialBodyFactory: CelestialBodyFactory) {
-    this.state = state
-    this.celestialBodyFactory = celestialBodyFactory
+  constructor() {
+    this.factory = new CelestialBodyFactory()
   }
 
-  public async createSolarSystem(): Promise<void> {
-    // create solar system container
-    const solarSystem = new THREE.Object3D()
-    this.state.scene.add(solarSystem)
-    this.state.objects.push(solarSystem)
+  public async createSolarSystem(): Promise<THREE.Group> {
+    const solarSystem = new THREE.Group()
+    solarSystem.name = 'solar-system'
 
-    // create Sun
-    const sun = await this.celestialBodyFactory.createPlanet('sun')
+    // create sun
+    const sun = await this.factory.createPlanet('sun')
     solarSystem.add(sun)
-    this.state.objects.push(sun)
 
     // create planets
-    const planets = [
-      'mercury',
-      'venus',
-      'earth',
-      'mars',
-      'jupiter',
-      'saturn',
-      'uranus',
-      'neptune',
-      'pluto',
-    ]
+    const planets = await Promise.all([
+      this.factory.createPlanet('mercury'),
+      this.factory.createPlanet('venus'),
+      this.factory.createPlanet('earth'),
+      this.factory.createPlanet('mars'),
+      this.factory.createPlanet('jupiter'),
+      this.factory.createPlanet('saturn'),
+      this.factory.createPlanet('uranus'),
+      this.factory.createPlanet('neptune'),
+      this.factory.createPlanet('pluto'),
+    ])
 
-    for (const planetName of planets) {
-      const planet = await this.celestialBodyFactory.createPlanet(planetName)
-      const config = celestialBodiesConfig[planetName]
-
-      // Set planet position
+    // add planets to solar system
+    planets.forEach((planet) => {
+      const config = celestialBodiesConfig[planet.name]
       planet.position.x = config.distance
+      solarSystem.add(planet)
 
-      // Create orbit and trail
-      const orbit = this.celestialBodyFactory.createOrbit(config.distance, planetName)
-      const trail = this.celestialBodyFactory.createOrbitTrail(config.distance, planetName)
-
+      // create orbit
+      const orbit = this.factory.createOrbit(config.distance, planet.name, 'ring')
       solarSystem.add(orbit)
+
+      // create orbit trail
+      const trail = this.factory.createOrbitTrail(config.distance, planet.name)
       solarSystem.add(trail)
-      orbit.add(planet)
+    })
 
-      this.state.objects.push(orbit, trail, planet)
-    }
-
-    // create Moon (special case as it orbits Earth)
-    const moon = await this.celestialBodyFactory.createPlanet('moon')
-    const earth = this.state.objects.find(obj => obj.name === 'earth')
-    if (earth) {
-      const moonConfig = celestialBodiesConfig.moon
-      moon.position.x = moonConfig.distance
-      earth.add(moon)
-      this.state.objects.push(moon)
-    }
+    return solarSystem
   }
 }

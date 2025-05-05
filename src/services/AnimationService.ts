@@ -1,5 +1,4 @@
 import type { ISolarSystemState } from '@/types/solar-system.types'
-import type * as THREE from 'three'
 import { celestialBodiesConfig } from '@/configs/celestial-bodies.config'
 
 /**
@@ -71,39 +70,35 @@ export class AnimationService {
 
   // * Animates all celestial bodies (self-rotation, orbital movement)
   private animateObjects(deltaTime: number): void {
-    // animate sun
-    const sun = this.state.objects.find(object => object.name === 'Sun') as THREE.Object3D
+    // update sun rotation
+    const sun = this.state.objects.find(obj => obj.name === 'Sun')
     if (sun) {
-      sun.rotation.y += deltaTime * celestialBodiesConfig.sun.selfRotationSpeed
+      sun.rotation.y += deltaTime * celestialBodiesConfig.sun.rotationSpeed
     }
 
-    // animate planets
-    const planets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto']
-    planets.forEach((planetName) => {
-      const planet = this.state.objects.find(object => object.name === planetName) as THREE.Object3D
-      const orbit = this.state.objects.find(object => object.name === `orbit-${planetName}`) as THREE.Object3D
-      const config = celestialBodiesConfig[planetName.toLowerCase()]
+    // update planet rotations and orbits
+    for (const planet of this.state.objects.filter(obj => obj.name !== 'Sun' && obj.name !== 'Moon')) {
+      const config = celestialBodiesConfig[planet.name.toLowerCase()]
+      if (config) {
+        // update planet rotation
+        planet.rotation.y += deltaTime * config.rotationSpeed
 
-      if (planet) {
-        planet.rotation.y += deltaTime * config.selfRotationSpeed
+        // update planet orbit rotation
+        const orbit = planet.parent
+        if (orbit) {
+          orbit.rotation.y += deltaTime * config.orbitSpeed
+        }
       }
-      if (orbit) {
-        orbit.rotation.y += deltaTime * config.orbitalRotationSpeed
-      }
-    })
+    }
 
-    // animate moon
-    const earth = this.state.objects.find(object => object.name === 'Earth') as THREE.Object3D
-    if (earth) {
-      const moonOrbit = earth.children.find(child => child.name === 'orbit-Moon') as THREE.Object3D
-      const moon = moonOrbit?.children[0] as THREE.Object3D
-
+    // update moon rotation and orbit
+    const moon = this.state.objects.find(obj => obj.name === 'Moon')
+    if (moon) {
+      const moonOrbit = moon.parent
       if (moonOrbit) {
-        moonOrbit.rotation.y += deltaTime * celestialBodiesConfig.moon.orbitalRotationSpeed
+        moonOrbit.rotation.y += deltaTime * celestialBodiesConfig.moon.orbitSpeed
       }
-      if (moon) {
-        moon.rotation.y += deltaTime * celestialBodiesConfig.moon.selfRotationSpeed
-      }
+      moon.rotation.y += deltaTime * celestialBodiesConfig.moon.rotationSpeed
     }
   }
 }

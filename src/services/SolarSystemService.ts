@@ -30,7 +30,7 @@ export class SolarSystemService {
     const state = this.sceneService.getState()
     this.animationService = new AnimationService(state)
     this.guiService = new GUIService(state)
-    this.celestialBodyService = new CelestialBodyService(state)
+    this.celestialBodyService = new CelestialBodyService(state, new CelestialBodyFactory())
 
     // setup scene with stars and lighting
     const stars = this.sceneService.createStars()
@@ -38,10 +38,19 @@ export class SolarSystemService {
     this.sceneService.createLights()
 
     // create the solar system with all celestial bodies
-    this.celestialBodyService.createSolarSystem()
+    this.initializeSolarSystem()
 
     // initialize the GUI controls
     this.guiService.initializeGUI()
+  }
+
+  private async initializeSolarSystem(): Promise<void> {
+    try {
+      await this.celestialBodyService.createSolarSystem()
+    }
+    catch (error) {
+      console.error('Error initializing solar system:', error)
+    }
   }
 
   // * Starts the animation loop for the solar system

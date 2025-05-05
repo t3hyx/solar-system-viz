@@ -9,7 +9,7 @@ export const colorConfig = {
 
   // * Celestial body colors
   sunYellow: new THREE.Color(0xFFFF00),
-  sunraysOrange: new THREE.Color(0xFFA500),
+  sunraysOrange: new THREE.Color(0xFFC800),
   mercuryBrown: new THREE.Color(0x8B4513),
   venusYellow: new THREE.Color(0xFFD700),
   earthBlue: new THREE.Color(0x0000FF),

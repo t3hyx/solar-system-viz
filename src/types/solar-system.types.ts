@@ -78,6 +78,8 @@ export interface ICelestialBody {
   name: string
   radius: number
   distance: number
+  rotationSpeed: number
+  orbitSpeed: number
   color: THREE.Color
   emissive: THREE.Color
   emissiveIntensity: number
@@ -90,6 +92,10 @@ export interface ICelestialBody {
   orbitInclination: number
   wireframed: boolean
   severity?: number // optional property for error handling
+  rings?: {
+    innerRadius: number
+    outerRadius: number
+  }
 }
 
 // # State Types
@@ -114,4 +120,15 @@ export interface ISolarSystemConfig {
   trails: ITrailConfig
   background: IBackgroundConfig
   celestialBodies: ICelestialBody[]
+}
+
+export interface ITextureConfig {
+  albedo: string
+  night?: string
+  clouds?: string
+  normal?: string
+  specular?: string
+  atmosphere?: string
+  rings?: string
+  type: 'color' | 'bump' | 'normal' | 'specular'
 }
